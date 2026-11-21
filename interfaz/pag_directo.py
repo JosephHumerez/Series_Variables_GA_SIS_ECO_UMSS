@@ -104,7 +104,7 @@ def mostrar() -> None:
         "Ninguno": None,
     }[mostrar_eq]
     figura = diagrama_flujo(serie, "ingreso" if "Ingresos" in sentido else "egreso", equivalente)
-    st.plotly_chart(figura, use_container_width=True, key="dir_diagrama")
+    st.plotly_chart(figura, width="stretch", key="dir_diagrama")
 
     # ------------------------------------------------------------------
     # Detalle en pestañas
@@ -125,7 +125,7 @@ def mostrar() -> None:
             }
             for p in r.pagos
         ]
-        st.dataframe(filas, hide_index=True, use_container_width=True)
+        st.dataframe(filas, hide_index=True, width="stretch")
         st.caption("Xₖ = A' ± (k − 1)·G")
 
     with tab_cuota:

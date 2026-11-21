@@ -78,7 +78,7 @@ def mostrar() -> None:
         st.metric(f"Tasa efectiva {periodo_pago}", formato_porcentaje(conversion.tasa_pago))
         st.caption(f"Valor decimal con precisión completa: {conversion.tasa_pago:.10f}")
     with col_boton:
-        if st.button("✅ Usar esta tasa en los cálculos", use_container_width=True):
+        if st.button("✅ Usar esta tasa en los cálculos", width="stretch"):
             guardar_tasa(conversion.tasa_pago, periodo_pago, descripcion)
             st.success("Tasa guardada. Se usará en las páginas de cálculo.")
 
