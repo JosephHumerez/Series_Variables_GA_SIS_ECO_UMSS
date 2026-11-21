@@ -11,7 +11,7 @@ está en la carpeta "interfaz" y toda la matemática en la carpeta "gradiente".
 
 import streamlit as st
 
-from interfaz import comun, pag_inicio, pag_tasas
+from interfaz import comun, pag_directo, pag_inicio, pag_tasas
 
 
 st.set_page_config(
@@ -24,6 +24,7 @@ st.set_page_config(
 navegacion = st.navigation([
     st.Page(pag_inicio.mostrar, title="Inicio", icon="🏠", url_path="inicio", default=True),
     st.Page(pag_tasas.mostrar, title="Conversión de tasas", icon="🔄", url_path="tasas"),
+    st.Page(pag_directo.mostrar, title="Cálculo directo", icon="🧮", url_path="directo"),
 ])
 
 with st.sidebar:

@@ -9,4 +9,6 @@ Módulos:
     comun       -> piezas compartidas (mostrar pasos, tasa en uso, entradas)
     pag_inicio  -> página de bienvenida
     pag_tasas   -> página 1: conversión de tasas
+    diagrama    -> diagrama de flujo de caja (Plotly)
+    pag_directo -> página 2: cálculo directo (A, P, F, X_k)
 """
