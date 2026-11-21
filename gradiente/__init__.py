@@ -8,4 +8,6 @@ Módulos:
     tasas     -> conversión de tasas nominales y efectivas al periodo de pago
     serie     -> cálculo directo de la serie (A, P, F, cuotas X_k, diferidas, avisos)
     despejes  -> cálculos inversos: n por último pago, A', G y sistema de 2 ecuaciones
+    numericos -> métodos numéricos: búsqueda de intervalos, bisección, Newton-Raphson
+    despejes_numericos -> despejes de i y n conociendo P, F o A (con interpolación)
 """
