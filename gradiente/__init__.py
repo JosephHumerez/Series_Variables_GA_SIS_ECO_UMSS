@@ -10,4 +10,5 @@ Módulos:
     despejes  -> cálculos inversos: n por último pago, A', G y sistema de 2 ecuaciones
     numericos -> métodos numéricos: búsqueda de intervalos, bisección, Newton-Raphson
     despejes_numericos -> despejes de i y n conociendo P, F o A (con interpolación)
+    procedimiento -> pasos "estilo libro" (LaTeX) a partir de los resultados
 """
