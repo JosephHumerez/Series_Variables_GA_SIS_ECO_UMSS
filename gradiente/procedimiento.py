@@ -56,7 +56,9 @@ def formato_porcentaje(i: float, max_decimales: int = 4) -> str:
 
 def num(x: float, decimales: int = DECIMALES_DINERO, parentesis: bool = True) -> str:
     """Número en LaTeX: '146\\,111{,}54'. Los negativos van entre paréntesis."""
-    texto = formato_numero(x, decimales).replace(" ", r"\,").replace(",", "{,}")
+    # Primero la coma decimal y DESPUÉS el espacio de miles (el orden importa:
+    # si se hiciera al revés, la coma de "\," también se cambiaría por "{,}")
+    texto = formato_numero(x, decimales).replace(",", "{,}").replace(" ", r"\,")
     if parentesis and texto.startswith("-"):
         return f"({texto})"
     return texto
