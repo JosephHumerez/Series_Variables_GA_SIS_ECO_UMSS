@@ -7,4 +7,5 @@ Módulos:
     factores  -> factores financieros (P/F, F/P, P/A, A/P, F/A, A/F, P/G, A/G, F/G)
     tasas     -> conversión de tasas nominales y efectivas al periodo de pago
     serie     -> cálculo directo de la serie (A, P, F, cuotas X_k, diferidas, avisos)
+    despejes  -> cálculos inversos: n por último pago, A', G y sistema de 2 ecuaciones
 """
