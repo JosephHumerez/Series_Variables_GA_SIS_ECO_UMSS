@@ -1,4 +1,4 @@
-# 📈 Calculadora de Series Variables en Gradiente Aritmético
+# Calculadora de Series Variables en Gradiente Aritmético
 
 Aplicación web local para resolver problemas de **series en gradiente aritmético (G.A.)** siguiendo la metodología del libro **_Ingeniería Económica_ de M. Sc. Emir Vargas Peredo** (Unidad 2: Valor del dinero en el tiempo, sección *Factor de conversión de gradiente aritmético*).
 
