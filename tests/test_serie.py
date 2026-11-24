@@ -24,17 +24,13 @@ def valor_futuro_flujo_a_flujo(serie):
                for k in range(1, serie.n + 1))
 
 
-# ---------------------------------------------------------------------------
-# Ejercicios del libro
-# ---------------------------------------------------------------------------
-
 def test_ejercicio_1_libro_gradiente_decreciente():
     """A' = 30 000, disminuye 2 000 por semestre, i = 9,27 %, n = 11 -> P = 146 111,54"""
     r = calcular(SerieGradiente(A_prima=30_000, G=2_000, i=0.0927, n=11, tipo="decreciente"))
     assert round(r.factor_AG, 5) == 4.12734
     assert round(r.A, 2) == 21_745.33
     assert round(r.P, 2) == 146_111.54
-    assert r.pagos[-1].monto == 10_000          # último pago del enunciado
+    assert r.pagos[-1].monto == 10_000
 
 
 def test_ejercicio_2_libro_gradiente_creciente():
@@ -47,14 +43,8 @@ def test_ejercicio_2_libro_gradiente_creciente():
 def test_ejercicio_6_libro_en_sentido_directo():
     """Con A' = 1 525,12 (respuesta del libro), G = 500, i = 15 %, n = 5 -> P ≈ 8 000"""
     r = calcular(SerieGradiente(A_prima=1_525.12, G=500, i=0.15, n=5))
-    # A' viene redondeado a 2 decimales (error máx. 0,005), y al multiplicarlo por
-    # (P/A; 15 %; 5) = 3,35216 el error en P puede llegar a ~0,017.
     assert r.P == pytest.approx(8_000, abs=0.02)
 
-
-# ---------------------------------------------------------------------------
-# Coherencia interna
-# ---------------------------------------------------------------------------
 
 @pytest.mark.parametrize("tipo", ["creciente", "decreciente"])
 def test_factores_coinciden_con_flujo_a_flujo(tipo):
@@ -68,7 +58,7 @@ def test_metodo_alternativo_da_lo_mismo():
     r = calcular(SerieGradiente(A_prima=30_000, G=2_000, i=0.0927, n=11, tipo="decreciente"))
     assert r.P_base + r.P_gradiente == pytest.approx(r.P)
     assert r.F_base + r.F_gradiente == pytest.approx(r.F)
-    assert r.A_gradiente < 0                    # decreciente -> el aporte resta
+    assert r.A_gradiente < 0
 
 
 def test_tabla_de_pagos():
@@ -91,10 +81,6 @@ def test_tasa_cero():
     assert r.P == pytest.approx(100 + 110 + 120 + 130)
 
 
-# ---------------------------------------------------------------------------
-# Series diferidas
-# ---------------------------------------------------------------------------
-
 def test_serie_diferida():
     """Primera cuota en el periodo 4 -> P queda en el periodo 3 y se trae al 0."""
     serie = SerieGradiente(A_prima=5_000, G=500, i=0.08, n=6, inicio=4)
@@ -112,17 +98,12 @@ def test_serie_no_diferida_no_usa_paso_4():
     assert r.P == r.P_origen
 
 
-# ---------------------------------------------------------------------------
-# Avisos de cuotas no positivas
-# ---------------------------------------------------------------------------
-
 def test_aviso_cuota_negativa():
-    # Cuotas: 10 000, 7 000, 4 000, 1 000, -2 000, -5 000
     r = calcular(SerieGradiente(A_prima=10_000, G=3_000, i=0.05, n=6, tipo="decreciente"))
     assert len(r.avisos) == 1
     assert "cuota número 5" in r.avisos[0]
     assert "negativa" in r.avisos[0]
-    assert r.P != 0                              # el cálculo NO se bloquea
+    assert r.P != 0
 
 
 def test_aviso_cuota_cero():
@@ -136,18 +117,14 @@ def test_sin_avisos_si_todo_es_positivo():
     assert r.avisos == ()
 
 
-# ---------------------------------------------------------------------------
-# Validaciones
-# ---------------------------------------------------------------------------
-
 @pytest.mark.parametrize(
     "datos",
     [
-        dict(A_prima=100, G=-10, i=0.05, n=5),                    # G negativo
-        dict(A_prima=100, G=10, i=0.05, n=0),                     # n < 1
-        dict(A_prima=100, G=10, i=0.05, n=4.5),                   # n no entero
-        dict(A_prima=100, G=10, i=0.05, n=5, tipo="variable"),    # tipo inválido
-        dict(A_prima=100, G=10, i=0.05, n=5, inicio=0),           # inicio < 1
+        dict(A_prima=100, G=-10, i=0.05, n=5),
+        dict(A_prima=100, G=10, i=0.05, n=0),
+        dict(A_prima=100, G=10, i=0.05, n=4.5),
+        dict(A_prima=100, G=10, i=0.05, n=5, tipo="variable"),
+        dict(A_prima=100, G=10, i=0.05, n=5, inicio=0),
     ],
 )
 def test_datos_invalidos(datos):

@@ -22,10 +22,6 @@ def todo_el_texto(pasos):
     return "\n".join(partes)
 
 
-# ---------------------------------------------------------------------------
-# Formato de números
-# ---------------------------------------------------------------------------
-
 @pytest.mark.parametrize(
     "x, decimales, esperado",
     [
@@ -33,7 +29,7 @@ def todo_el_texto(pasos):
         (-2_000, 2, "-2 000,00"),
         (4.127338, 5, "4,12734"),
         (12.5, 2, "12,50"),
-        (-0.001, 2, "0,00"),          # no muestra "-0,00"
+        (-0.001, 2, "0,00"),
     ],
 )
 def test_formato_numero(x, decimales, esperado):
@@ -56,17 +52,13 @@ def test_numeros_en_latex():
     assert pr.notacion("A/G", 0.0927, 11) == r"(A/G;\ 9{,}27\,\%;\ 11)"
 
 
-# ---------------------------------------------------------------------------
-# Cálculo directo
-# ---------------------------------------------------------------------------
-
 def test_procedimiento_ejercicio_1_libro():
     r = calcular(SerieGradiente(A_prima=30_000, G=2_000, i=0.0927, n=11, tipo="decreciente"))
     texto = todo_el_texto(pr.procedimiento_serie(r))
-    assert r"A = A' - G\,(A/G;\ i;\ n)" in texto     # fórmula del libro con signo menos
-    assert "4{,}12734" in texto                       # factor A/G a 5 decimales
-    assert r"21\,745{,}33" in texto                   # anualidad equivalente
-    assert r"146\,111{,}54" in texto                  # valor presente
+    assert r"A = A' - G\,(A/G;\ i;\ n)" in texto
+    assert "4{,}12734" in texto
+    assert r"21\,745{,}33" in texto
+    assert r"146\,111{,}54" in texto
 
 
 def test_procedimiento_ejercicio_2_libro():
@@ -90,10 +82,6 @@ def test_procedimiento_cuota():
     assert paso.ecuaciones[-1] == r"X_{11} = 10\,000{,}00"
 
 
-# ---------------------------------------------------------------------------
-# Conversión de tasas
-# ---------------------------------------------------------------------------
-
 def test_procedimiento_tasa_nominal():
     c = convertir_a_periodo_de_pago(0.24, "nominal", "anual", "semestral", capitalizacion="mensual")
     pasos = pr.procedimiento_conversion(c)
@@ -108,10 +96,6 @@ def test_procedimiento_tasa_sin_conversion():
     pasos = pr.procedimiento_conversion(c)
     assert "no requiere conversión" in pasos[0].explicacion
 
-
-# ---------------------------------------------------------------------------
-# Despejes
-# ---------------------------------------------------------------------------
 
 def test_procedimiento_n_ultimo_pago():
     r = d.n_por_ultimo_pago(30_000, 10_000, 2_000)

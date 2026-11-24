@@ -13,7 +13,7 @@ from pathlib import Path
 import pytest
 from streamlit.testing.v1 import AppTest
 
-APP = Path(__file__).parent.parent / "app.py"     # app.py está en la raíz del proyecto
+APP = Path(__file__).parent.parent / "app.py"
 
 
 def test_aplicacion_completa_carga_sin_errores():
@@ -36,15 +36,15 @@ def test_pagina_tasas_valores_por_defecto():
 def test_pagina_tasas_efectiva():
     at = AppTest.from_function(_pagina_tasas).run()
     at.radio[0].set_value("Efectiva").run()
-    at.number_input[0].set_value(12.0).run()          # 12 % efectiva anual
-    at.selectbox[1].set_value("trimestral").run()      # pagos trimestrales
-    assert at.metric[0].value == "2,8737 %"           # 1,12^(1/4) - 1
+    at.number_input[0].set_value(12.0).run()
+    at.selectbox[1].set_value("trimestral").run()
+    assert at.metric[0].value == "2,8737 %"
 
 
 def test_pagina_tasas_capitalizacion_imposible_muestra_error():
     at = AppTest.from_function(_pagina_tasas).run()
-    at.selectbox[0].set_value("semestral").run()       # tasa nominal semestral...
-    at.selectbox[1].set_value("anual").run()           # ...capitalizable anualmente
+    at.selectbox[0].set_value("semestral").run()
+    at.selectbox[1].set_value("anual").run()
     assert at.error
     assert not at.exception
 
@@ -75,7 +75,7 @@ def test_pagina_directo_ejercicio_2():
 
 def test_pagina_directo_aviso_cuota_negativa():
     at = AppTest.from_function(_pagina_directo).run()
-    at.number_input(key="dir_n").set_value(20).run()      # 30 000 - 19·2 000 < 0
+    at.number_input(key="dir_n").set_value(20).run()
     assert at.warning
     assert not at.exception
 

@@ -10,10 +10,6 @@ import pytest
 from gradiente import tasas as t
 
 
-# ---------------------------------------------------------------------------
-# Periodicidades
-# ---------------------------------------------------------------------------
-
 def test_periodicidades_del_curso():
     assert t.PERIODICIDADES == (
         "mensual", "bimestral", "trimestral", "cuatrimestral", "semestral", "anual"
@@ -46,8 +42,8 @@ def test_capitalizaciones_por_periodo(capitalizacion, periodo_nominal, m):
 @pytest.mark.parametrize(
     "capitalizacion, periodo_nominal",
     [
-        ("anual", "semestral"),        # capitaliza menos seguido que su periodo
-        ("trimestral", "bimestral"),   # no cabe un número entero de veces
+        ("anual", "semestral"),
+        ("trimestral", "bimestral"),
         ("cuatrimestral", "semestral"),
     ],
 )
@@ -55,10 +51,6 @@ def test_capitalizacion_imposible(capitalizacion, periodo_nominal):
     with pytest.raises(ValueError):
         t.capitalizaciones_por_periodo(capitalizacion, periodo_nominal)
 
-
-# ---------------------------------------------------------------------------
-# Conversiones básicas
-# ---------------------------------------------------------------------------
 
 def test_nominal_a_efectiva_y_regreso():
     i = t.nominal_a_efectiva(0.24, "mensual")
@@ -73,11 +65,11 @@ def test_nominal_semestral_capitalizable_trimestralmente():
 @pytest.mark.parametrize(
     "i, origen, destino, esperado",
     [
-        (0.03, "trimestral", "semestral", 0.0609),          # (1.03)^2 - 1
-        (0.02, "mensual", "anual", 1.02 ** 12 - 1),         # 26.8242 %
-        (0.1236, "anual", "semestral", 0.06),               # 1.1236^(1/2) - 1
+        (0.03, "trimestral", "semestral", 0.0609),
+        (0.02, "mensual", "anual", 1.02 ** 12 - 1),
+        (0.1236, "anual", "semestral", 0.06),
         (0.01, "mensual", "cuatrimestral", 1.01 ** 4 - 1),
-        (0.05, "bimestral", "bimestral", 0.05),             # misma periodicidad
+        (0.05, "bimestral", "bimestral", 0.05),
     ],
 )
 def test_efectiva_a_efectiva(i, origen, destino, esperado):
@@ -89,17 +81,13 @@ def test_ida_y_vuelta_no_cambia_la_tasa():
     assert t.efectiva_a_efectiva(i_sem, "semestral", "mensual") == pytest.approx(0.0066)
 
 
-# ---------------------------------------------------------------------------
-# Conversión completa
-# ---------------------------------------------------------------------------
-
 def test_conversion_nominal_guarda_pasos_intermedios():
     r = t.convertir_a_periodo_de_pago(
         0.24, "nominal", "anual", "semestral", capitalizacion="mensual"
     )
     assert r.m == 12
     assert r.tasa_capitalizacion == pytest.approx(0.02)
-    assert r.tasa_pago == pytest.approx(1.02 ** 6 - 1)   # 12.6162 % semestral
+    assert r.tasa_pago == pytest.approx(1.02 ** 6 - 1)
 
 
 def test_conversion_nominal_cuando_capitaliza_igual_que_el_pago():

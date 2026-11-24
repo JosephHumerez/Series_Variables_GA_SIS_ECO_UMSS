@@ -11,10 +11,6 @@ from gradiente import despejes_numericos as dn
 from gradiente.serie import SerieGradiente, calcular
 
 
-# ---------------------------------------------------------------------------
-# Despejar la tasa i
-# ---------------------------------------------------------------------------
-
 def test_tasa_ejercicio_1_libro():
     """P = 146 111,54, A' = 30 000, G = 2 000 decreciente, n = 11 -> i = 9,27 %"""
     r = dn.despejar_tasa(valor=146_111.54, dato="P", A_prima=30_000, G=2_000,
@@ -30,7 +26,7 @@ def test_tasa_ejercicio_2_libro_con_interpolacion():
     assert r.i == pytest.approx(0.0066, abs=1e-6)
     interp = r.interpolacion
     assert (interp.i1, interp.i2) == (0.005, 0.0075)
-    assert interp.i_interpolada == pytest.approx(0.0066, abs=1e-4)   # aproximada
+    assert interp.i_interpolada == pytest.approx(0.0066, abs=1e-4)
 
 
 def test_tasa_ejercicio_6_libro():
@@ -50,7 +46,6 @@ def test_tasa_ida_y_vuelta(dato):
 
 
 def test_tasa_imposible_da_error():
-    # P mayor que la suma de todos los pagos: ninguna tasa positiva lo cumple
     with pytest.raises(ValueError):
         dn.despejar_tasa(valor=1_000_000, dato="P", A_prima=1_000, G=100,
                          tipo="creciente", n=5)
@@ -60,10 +55,6 @@ def test_tasa_con_A_y_sin_gradiente_da_error():
     with pytest.raises(ValueError):
         dn.despejar_tasa(valor=1_000, dato="A", A_prima=1_000, G=0, tipo="creciente", n=5)
 
-
-# ---------------------------------------------------------------------------
-# Despejar el número de periodos n
-# ---------------------------------------------------------------------------
 
 def test_periodos_ejercicio_1_libro():
     """P = 146 111,54 -> n = 11. Hay otra solución con cuotas negativas: se avisa."""
@@ -88,7 +79,6 @@ def test_periodos_no_entero_sugiere_entero():
     assert not r.es_entero
     assert r.n_sugerido == round(r.n_exacto)
     assert r.serie_sugerida.n == r.n_sugerido
-    # Con n exacto la ecuación se cumple:
     assert dn.valor_equivalente("P", 1_525.12, 500, 0.15, r.n_exacto) == pytest.approx(9_000)
 
 

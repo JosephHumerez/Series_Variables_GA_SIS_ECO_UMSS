@@ -15,10 +15,6 @@ import pytest
 from gradiente import factores as f
 
 
-# ---------------------------------------------------------------------------
-# 1. Valores de tabla (i = 10 %, n = 10)
-# ---------------------------------------------------------------------------
-
 @pytest.mark.parametrize(
     "factor, esperado",
     [
@@ -37,17 +33,11 @@ def test_valores_de_tabla(factor, esperado):
     assert round(factor(0.10, 10), 5) == esperado
 
 
-# ---------------------------------------------------------------------------
-# 2. Relaciones entre factores
-# ---------------------------------------------------------------------------
-
 @pytest.mark.parametrize("i, n", [(0.0927, 11), (0.0066, 12), (0.15, 5), (0.02, 36)])
 def test_relaciones_entre_factores(i, n):
-    # Los factores inversos multiplican 1
     assert f.P_F(i, n) * f.F_P(i, n) == pytest.approx(1)
     assert f.P_A(i, n) * f.A_P(i, n) == pytest.approx(1)
     assert f.F_A(i, n) * f.A_F(i, n) == pytest.approx(1)
-    # P/G = (A/G)(P/A)   y   F/G = (P/G)(F/P)
     assert f.P_G(i, n) == pytest.approx(f.A_G(i, n) * f.P_A(i, n))
     assert f.F_G(i, n) == pytest.approx(f.P_G(i, n) * f.F_P(i, n))
 
@@ -59,18 +49,9 @@ def test_gradiente_es_suma_de_flujos_descontados():
     assert f.P_G(i, n) == pytest.approx(suma)
 
 
-# ---------------------------------------------------------------------------
-# 3. Paso intermedio del libro (Unidad 2, pág. 35, Ejercicio 1)
-#    i = 9,27 % semestral, n = 11  ->  (A/G) = 4,12734
-# ---------------------------------------------------------------------------
-
 def test_factor_AG_ejercicio_1_libro():
     assert round(f.A_G(0.0927, 11), 5) == 4.12734
 
-
-# ---------------------------------------------------------------------------
-# Casos límite y validaciones
-# ---------------------------------------------------------------------------
 
 def test_tasa_cero_coincide_con_limite():
     """Con i = 0 los factores deben coincidir con una tasa casi nula."""
@@ -80,6 +61,6 @@ def test_tasa_cero_coincide_con_limite():
 
 def test_datos_invalidos():
     with pytest.raises(ValueError):
-        f.P_A(-1.5, 10)   # tasa menor a -100 %
+        f.P_A(-1.5, 10)
     with pytest.raises(ValueError):
-        f.P_A(0.10, -3)   # periodos negativos
+        f.P_A(0.10, -3)

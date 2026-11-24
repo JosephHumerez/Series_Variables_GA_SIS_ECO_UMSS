@@ -20,10 +20,6 @@ def valor_de(serie, dato):
     return {"P": r.P, "F": r.F, "A": r.A}[dato]
 
 
-# ---------------------------------------------------------------------------
-# 1. n por último pago
-# ---------------------------------------------------------------------------
-
 def test_n_ejercicio_1_libro():
     """A' = 30 000, último = 10 000, G = 2 000 -> n = 11 (decreciente)"""
     r = d.n_por_ultimo_pago(A_prima=30_000, ultimo_pago=10_000, G=2_000)
@@ -39,7 +35,7 @@ def test_n_creciente():
 
 
 def test_n_no_entero_sugiere_el_mas_cercano():
-    r = d.n_por_ultimo_pago(A_prima=1_000, ultimo_pago=2_100, G=300)   # 4,67
+    r = d.n_por_ultimo_pago(A_prima=1_000, ultimo_pago=2_100, G=300)
     assert r.n_exacto == pytest.approx(4.6667, abs=1e-4)
     assert not r.es_entero
     assert r.n_sugerido == 5
@@ -49,10 +45,6 @@ def test_n_con_gradiente_cero_da_error():
     with pytest.raises(ValueError):
         d.n_por_ultimo_pago(A_prima=1_000, ultimo_pago=2_000, G=0)
 
-
-# ---------------------------------------------------------------------------
-# 2. Despejar A' conociendo G
-# ---------------------------------------------------------------------------
 
 def test_base_ejercicio_6_libro():
     """P = 8 000, G = 500 creciente, i = 15 %, n = 5 -> A' = 1 525,12"""
@@ -73,10 +65,6 @@ def test_base_serie_diferida():
                         i=0.05, n=6, inicio=4)
     assert valor_de(r.serie, "P") == pytest.approx(20_000)
 
-
-# ---------------------------------------------------------------------------
-# 3. Despejar G conociendo A'
-# ---------------------------------------------------------------------------
 
 def test_gradiente_ejercicio_2_libro():
     """F = 538 445,20, A' = 27 000, i = 0,66 %, n = 12 -> G = 3 000 creciente"""
@@ -102,10 +90,6 @@ def test_gradiente_con_n_igual_a_1_da_error():
     with pytest.raises(ValueError):
         d.despejar_gradiente(valor=1_000, dato="P", A_prima=900, i=0.1, n=1)
 
-
-# ---------------------------------------------------------------------------
-# 4. Sistema de dos ecuaciones: A' y G a la vez
-# ---------------------------------------------------------------------------
 
 def test_sistema_ejercicio_1_libro():
     """P = 146 111,54 y último pago X_11 = 10 000 -> A' = 30 000, G = 2 000 decreciente"""
@@ -138,10 +122,6 @@ def test_sistema_cuota_fuera_de_rango():
     with pytest.raises(ValueError):
         d.despejar_base_y_gradiente(valor=1_000, dato="P", k=7, X_k=100, i=0.1, n=5)
 
-
-# ---------------------------------------------------------------------------
-# Coeficientes
-# ---------------------------------------------------------------------------
 
 def test_dato_invalido():
     with pytest.raises(ValueError):
