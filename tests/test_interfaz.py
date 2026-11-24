@@ -85,8 +85,7 @@ def test_pagina_directo_usa_la_tasa_guardada():
     at.session_state["tasa_activa"] = {"i": 0.0927, "periodo": "semestral", "descripcion": "x"}
     at.run()
     assert at.checkbox(key="dir_usar_tasa").value is True
-    assert at.metric[1].value == "146 111,54"
-
+    assert at.metric.values[1] == "146 111,54"
 
 def test_boton_guarda_la_tasa():
     at = AppTest.from_function(_pagina_tasas).run()
