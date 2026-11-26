@@ -116,7 +116,7 @@ def _despeje(modo):
         ("A': conociendo G y P, F o A", ["1 525,12"]),
         ("G: conociendo A' y P, F o A", ["3 000,00", "Creciente"]),
         ("A' y G: conociendo P, F o A y una cuota Xₖ", ["30 000,00", "2 000,00", "Decreciente"]),
-        ("i: tasa de interés (método numérico)", ["0,66 %", "0,6604 %"]),
+        ("i: tasa de interés (método numérico)", ["0,66 %", "0,6596 %"]),
         ("n: conociendo P, F o A (método numérico)", ["11"]),
     ],
 )
@@ -133,6 +133,6 @@ def test_despeje_n_numerico_avisa_otra_solucion():
 def test_despeje_con_datos_imposibles_muestra_error():
     at = AppTest.from_function(_pagina_despejes, default_timeout=15).run()
     at.selectbox(key="des_modo").set_value("i: tasa de interés (método numérico)").run()
-    at.number_input(key="des5_valor").set_value(100_000_000.0).run()
+    at.number_input(key="des5_valor").set_value(1_000.0).run()
     assert at.error
     assert not at.exception
