@@ -58,8 +58,9 @@ def mostrar_tasa_activa_en_barra() -> None:
             st.caption("Ninguna. Puedes convertir una en «Conversión de tasas» "
                        "o escribirla directamente en cada cálculo.")
             return
-        st.success(f"{formato_porcentaje(tasa['i'])} efectiva {tasa['periodo']}")
+        st.success(f"{formato_porcentaje(tasa['i'])} efectiva {tasa['periodo']}",
+                   icon=":material/percent:")
         st.caption(tasa["descripcion"])
-        if st.button("Quitar tasa", key="quitar_tasa"):
+        if st.button("Quitar tasa", key="quitar_tasa", icon=":material/close:"):
             borrar_tasa()
             st.rerun()

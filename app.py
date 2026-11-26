@@ -16,15 +16,18 @@ from interfaz import comun, pag_directo, pag_inicio, pag_tasas
 
 st.set_page_config(
     page_title="Calculadora de Gradiente Aritmético",
-    page_icon="📈",
+    page_icon=":material/functions:",
     layout="wide",
 )
 
 # Menú lateral con las páginas de la aplicación
 navegacion = st.navigation([
-    st.Page(pag_inicio.mostrar, title="Inicio", icon="🏠", url_path="inicio", default=True),
-    st.Page(pag_tasas.mostrar, title="Conversión de tasas", icon="🔄", url_path="tasas"),
-    st.Page(pag_directo.mostrar, title="Cálculo directo", icon="🧮", url_path="directo"),
+    st.Page(pag_inicio.mostrar, title="Inicio", icon=":material/home:",
+            url_path="inicio", default=True),
+    st.Page(pag_tasas.mostrar, title="Conversión de tasas", icon=":material/percent:",
+            url_path="tasas"),
+    st.Page(pag_directo.mostrar, title="Cálculo directo", icon=":material/calculate:",
+            url_path="directo"),
 ])
 
 with st.sidebar:

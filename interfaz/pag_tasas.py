@@ -13,7 +13,7 @@ from interfaz.comun import guardar_tasa, mostrar_pasos
 
 
 def mostrar() -> None:
-    st.title("🔄 Conversión de tasas")
+    st.title(":material/percent: Conversión de tasas")
     st.markdown(
         "Antes de aplicar los factores, la tasa debe ser la **tasa efectiva del "
         "periodo de pago**. Por ejemplo, si las cuotas son semestrales, se necesita "
@@ -56,7 +56,8 @@ def mostrar() -> None:
                        f"capitalizable {capitalizacion}mente")
     else:
         descripcion = f"{formato_porcentaje(tasa_pct / 100)} efectiva {periodicidad}"
-    st.info(f"Se interpreta como: **{descripcion}**, con pagos **{periodo_pago}es**.")
+    st.info(f"Se interpreta como: **{descripcion}**, con pagos **{periodo_pago}es**.",
+            icon=":material/info:")
 
     # ------------------------------------------------------------------
     # Cálculo
@@ -66,7 +67,7 @@ def mostrar() -> None:
             tasa_pct / 100, tipo.lower(), periodicidad, periodo_pago, capitalizacion
         )
     except ValueError as error:
-        st.error(str(error))
+        st.error(str(error), icon=":material/error:")
         return
 
     # ------------------------------------------------------------------
@@ -78,9 +79,11 @@ def mostrar() -> None:
         st.metric(f"Tasa efectiva {periodo_pago}", formato_porcentaje(conversion.tasa_pago))
         st.caption(f"Valor decimal con precisión completa: {conversion.tasa_pago:.10f}")
     with col_boton:
-        if st.button("✅ Usar esta tasa en los cálculos", width="stretch"):
+        if st.button("Usar esta tasa en los cálculos", icon=":material/check_circle:",
+                     type="primary", width="stretch"):
             guardar_tasa(conversion.tasa_pago, periodo_pago, descripcion)
-            st.success("Tasa guardada. Se usará en las páginas de cálculo.")
+            st.success("Tasa guardada. Se usará en las páginas de cálculo.",
+                       icon=":material/task_alt:")
 
     st.subheader("Procedimiento")
     mostrar_pasos(procedimiento_conversion(conversion))

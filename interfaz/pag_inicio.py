@@ -6,7 +6,7 @@ import streamlit as st
 
 
 def mostrar() -> None:
-    st.title("📈 Calculadora de Series en Gradiente Aritmético")
+    st.title(":material/functions: Calculadora de Series en Gradiente Aritmético")
     st.markdown(
         "Resuelve problemas de **series variables en gradiente aritmético (G.A.)** "
         "siguiendo la metodología del libro *Ingeniería Económica* de "

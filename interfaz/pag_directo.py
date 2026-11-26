@@ -36,7 +36,7 @@ def _pedir_tasa() -> float:
 
 
 def mostrar() -> None:
-    st.title("🧮 Cálculo directo")
+    st.title(":material/calculate: Cálculo directo")
     st.markdown("Calcula **A**, **P**, **F** y las cuotas **Xₖ** de una serie en gradiente aritmético.")
 
     # ------------------------------------------------------------------
@@ -75,7 +75,7 @@ def mostrar() -> None:
                                tipo=tipo.lower(), inicio=int(inicio))
         r = calcular(serie)
     except ValueError as error:
-        st.error(str(error))
+        st.error(str(error), icon=":material/error:")
         return
 
     # ------------------------------------------------------------------
@@ -93,7 +93,7 @@ def mostrar() -> None:
     m4.metric(f"Última cuota, X{serie.n}", formato_numero(r.pagos[-1].monto))
 
     for aviso in r.avisos:
-        st.warning(aviso, icon="⚠️")
+        st.warning(aviso, icon=":material/warning:")
 
     # ------------------------------------------------------------------
     # Diagrama de flujo
@@ -109,7 +109,11 @@ def mostrar() -> None:
     # ------------------------------------------------------------------
     # Detalle en pestañas
     # ------------------------------------------------------------------
-    tab_proc, tab_tabla, tab_cuota = st.tabs(["📝 Procedimiento", "📋 Tabla de pagos", "🔎 Cuota Xₖ"])
+    tab_proc, tab_tabla, tab_cuota = st.tabs([
+        ":material/format_list_numbered: Procedimiento",
+        ":material/table_chart: Tabla de pagos",
+        ":material/search: Cuota Xₖ",
+    ])
 
     with tab_proc:
         mostrar_pasos(procedimiento_serie(r))

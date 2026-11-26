@@ -204,10 +204,10 @@ En la terminal, pulsa **Ctrl + C**. Para salir del entorno virtual: `deactivate`
 ┌────────────────────┬──────────────────────────────────────────┐
 │ BARRA LATERAL      │  CONTENIDO DE LA PÁGINA                  │
 │                    │                                          │
-│ 🏠 Inicio          │  Datos  →  Resultados  →  Diagrama       │
-│ 🔄 Conversión de   │                                          │
+│ Inicio             │  Datos  →  Resultados  →  Diagrama       │
+│ Conversión de      │                                          │
 │    tasas           │  [Procedimiento] [Tabla] [Cuota Xₖ]      │
-│ 🧮 Cálculo directo │                                          │
+│ Cálculo directo    │                                          │
 │                    │                                          │
 │ Tasa en uso:       │                                          │
 │ 12,6162 % semestral│                                          │
@@ -232,7 +232,7 @@ En la terminal, pulsa **Ctrl + C**. Para salir del entorno virtual: `deactivate`
 
 > *Un primer pago de 30 000 disminuye en 2 000 cada semestre hasta un último pago de 10 000. Con una tasa de 9,27 % semestral, ¿cuál es el valor presente?*
 
-1. Abre **🧮 Cálculo directo** en el menú. Ya viene cargada con estos datos:
+1. Abre **Cálculo directo** en el menú. Ya viene cargada con estos datos:
 
    | Campo | Valor |
    |---|---|
@@ -246,25 +246,25 @@ En la terminal, pulsa **Ctrl + C**. Para salir del entorno virtual: `deactivate`
 
    | A | P | F | Última cuota |
    |---|---|---|---|
-   | 21 745,33 | **146 111,54** ✅ | 387 431,46 | 10 000,00 |
+   | 21 745,33 | **146 111,54** | 387 431,46 | 10 000,00 |
 
 3. Revisa el **diagrama**: las flechas bajan de altura de 30 000 a 10 000 y la flecha roja muestra P en el periodo 0.
-4. Abre la pestaña **📝 Procedimiento**:
+4. Abre la pestaña **Procedimiento**:
 
    ```
    A = A' − G (A/G; 9,27 %; 11) = 30 000 − 2 000 (4,12734) = 21 745,33
    P = A (P/A; 9,27 %; 11) = 21 745,33 (6,71922) = 146 111,54
    ```
 
-5. En **📋 Tabla de pagos** están las 11 cuotas, y en **🔎 Cuota Xₖ** puedes calcular cualquiera.
+5. En **Tabla de pagos** están las 11 cuotas, y en **Cuota Xₖ** puedes calcular cualquiera.
 
-> 💡 n se obtuvo con n = (30 000 − 10 000)/2 000 + 1 = 11.
+> **Nota:** n se obtuvo con n = (30 000 − 10 000)/2 000 + 1 = 11.
 
 ### Ejemplo 2: Gradiente creciente, valor futuro (Ejercicio 2 del libro)
 
 > *Se depositan mensualmente ingresos que empiezan en 27 000 y aumentan 3 000 cada mes durante un año, al 0,66 % mensual. ¿Cuánto se acumula?*
 
-1. En **🧮 Cálculo directo** ingresa:
+1. En **Cálculo directo** ingresa:
 
    | Campo | Valor |
    |---|---|
@@ -274,14 +274,14 @@ En la terminal, pulsa **Ctrl + C**. Para salir del entorno virtual: `deactivate`
    | n | 12 |
    | i (%) | 0.66 |
 
-2. Resultado: **F = 538 445,20** ✅ (A = 43 264,85).
+2. Resultado: **F = 538 445,20** (A = 43 264,85).
 3. En **Opciones avanzadas** elige *Las cuotas son: Ingresos (↑)* y *Valor equivalente: F* para ver la flecha de F en el periodo 12.
 
 ### Ejemplo 3: Convertir una tasa nominal y usarla
 
 > *La tasa es 24 % anual capitalizable mensualmente y los pagos son semestrales.*
 
-1. Abre **🔄 Conversión de tasas**. Ingresa: *Nominal*, `24`, periodo *anual*, capitalización *mensual*, pagos *semestrales*.
+1. Abre **Conversión de tasas**. Ingresa: *Nominal*, `24`, periodo *anual*, capitalización *mensual*, pagos *semestrales*.
 2. Comprueba el recuadro azul: *"24 % nominal anual capitalizable mensualmente, con pagos semestrales"*.
 3. Resultado: **12,6162 % semestral**. El procedimiento muestra:
 
@@ -290,14 +290,14 @@ En la terminal, pulsa **Ctrl + C**. Para salir del entorno virtual: `deactivate`
    i_sem = (1 + 0,02)^(12/2) − 1 = 12,6162 %
    ```
 
-4. Pulsa **✅ Usar esta tasa en los cálculos**. La tasa aparece en la barra lateral.
-5. Ve a **🧮 Cálculo directo**: la casilla *"Usar la tasa en uso"* ya está marcada.
+4. Pulsa **Usar esta tasa en los cálculos**. La tasa aparece en la barra lateral.
+5. Ve a **Cálculo directo**: la casilla *"Usar la tasa en uso"* ya está marcada.
 
 ### Ejemplo 4: Serie diferida
 
 > *Igual que el Ejemplo 1, pero la primera cuota ocurre en el periodo 4.*
 
-1. En **🧮 Cálculo directo** abre **Opciones avanzadas** y pon *Periodo de la primera cuota* = `4`.
+1. En **Cálculo directo** abre **Opciones avanzadas** y pon *Periodo de la primera cuota* = `4`.
 2. El procedimiento agrega el **Paso 2b**: el valor presente de la serie queda en el periodo 3 y se trae al periodo 0 con (P/F; i; 3).
 3. En el diagrama las cuotas empiezan en el periodo 4.
 
@@ -324,10 +324,10 @@ python -m pytest -v -k "libro"
 
 | Ejercicio del libro (pág. 35) | Datos | Resultado oficial | Calculadora |
 |---|---|---|---|
-| Ej. 1: hallar n | A' = 30 000, último = 10 000, G = 2 000 ↓ | n = 11 | n = 11 ✅ |
-| Ej. 1: hallar P | i = 9,27 % semestral | P = 146 111,54 | 146 111,54 ✅ |
-| Ej. 2: hallar F | A' = 27 000, G = 3 000 ↑, n = 12, i = 0,66 % | F = 538 445,20 | 538 445,20 ✅ |
-| Ej. 6: hallar A' | P = 8 000, n = 5, G = 500 ↑, i = 15 % | A' = 1 525,12 | 1 525,12 ✅ |
+| Ej. 1: hallar n | A' = 30 000, último = 10 000, G = 2 000 ↓ | n = 11 | n = 11 (correcto) |
+| Ej. 1: hallar P | i = 9,27 % semestral | P = 146 111,54 | 146 111,54 (correcto) |
+| Ej. 2: hallar F | A' = 27 000, G = 3 000 ↑, n = 12, i = 0,66 % | F = 538 445,20 | 538 445,20 (correcto) |
+| Ej. 6: hallar A' | P = 8 000, n = 5, G = 500 ↑, i = 15 % | A' = 1 525,12 | 1 525,12 (correcto) |
 
 Además de los ejercicios, las pruebas verifican:
 - Los factores contra los valores de tabla (5 decimales).
@@ -352,8 +352,8 @@ Además de los ejercicios, las pruebas verifican:
 
 | Parte | Estado |
 |---|---|
-| Núcleo matemático (factores, tasas, serie, despejes, métodos numéricos, procedimiento) | ✅ Completo y probado |
-| Página de inicio | ✅ |
-| Página de conversión de tasas | ✅ |
-| Página de cálculo directo con diagrama de flujo | ✅ |
-| Página de despejes (n, i, A', G, sistema 2×2) | ⏳ En construcción |
+| Núcleo matemático (factores, tasas, serie, despejes, métodos numéricos, procedimiento) | Completo y probado |
+| Página de inicio | Completo |
+| Página de conversión de tasas | Completo |
+| Página de cálculo directo con diagrama de flujo | Completo |
+| Página de despejes (n, i, A', G, sistema 2×2) | En construcción |
