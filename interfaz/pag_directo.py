@@ -10,29 +10,10 @@ Los valores por defecto son los del Ejercicio 1 del libro (pág. 35).
 
 import streamlit as st
 
-from gradiente.procedimiento import (
-    formato_numero, formato_porcentaje, procedimiento_cuota, procedimiento_serie,
-)
+from gradiente.procedimiento import formato_numero, procedimiento_cuota, procedimiento_serie
 from gradiente.serie import SerieGradiente, calcular
-from interfaz.comun import mostrar_pasos, tasa_activa
+from interfaz.comun import mostrar_pasos, mostrar_tabla_pagos, pedir_tasa
 from interfaz.diagrama import diagrama_flujo
-
-
-def _pedir_tasa() -> float:
-    """Usa la tasa guardada en «Conversión de tasas» o pide una nueva. Devuelve i decimal."""
-    tasa = tasa_activa()
-    if tasa is not None:
-        usar = st.checkbox(
-            f"Usar la tasa en uso: {formato_porcentaje(tasa['i'])} efectiva {tasa['periodo']}",
-            value=True, key="dir_usar_tasa",
-        )
-        if usar:
-            return tasa["i"]
-    return st.number_input(
-        "Tasa efectiva por periodo, i (%)", min_value=0.0, value=9.27, step=0.1,
-        format="%.4f", key="dir_i",
-        help="Debe estar en el mismo periodo que las cuotas. Si no, conviértela primero.",
-    ) / 100
 
 
 def mostrar() -> None:
@@ -54,7 +35,7 @@ def mostrar() -> None:
                         horizontal=True, key="dir_tipo")
         n = st.number_input("Número de cuotas, n", min_value=1, value=11, step=1, key="dir_n")
     with col3:
-        i = _pedir_tasa()
+        i = pedir_tasa("dir", 9.27)
 
     with st.expander("Opciones avanzadas: serie diferida y diagrama"):
         c1, c2, c3 = st.columns(3)
@@ -119,18 +100,7 @@ def mostrar() -> None:
         mostrar_pasos(procedimiento_serie(r))
 
     with tab_tabla:
-        filas = [
-            {
-                "Cuota": p.numero,
-                "Periodo": p.periodo,
-                "Base A'": formato_numero(p.base),
-                "Gradiente": formato_numero(p.gradiente),
-                "Pago Xₖ": formato_numero(p.monto),
-            }
-            for p in r.pagos
-        ]
-        st.dataframe(filas, hide_index=True, width="stretch")
-        st.caption("Xₖ = A' ± (k − 1)·G")
+        mostrar_tabla_pagos(r.pagos)
 
     with tab_cuota:
         k = st.number_input("Número de cuota, k", min_value=1, max_value=serie.n,

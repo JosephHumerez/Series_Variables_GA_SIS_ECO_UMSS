@@ -4,7 +4,8 @@ Piezas compartidas por todas las páginas de la interfaz.
 
 import streamlit as st
 
-from gradiente.procedimiento import Paso, formato_porcentaje
+from gradiente.procedimiento import Paso, formato_numero, formato_porcentaje
+from gradiente.serie import Pago
 
 
 # ---------------------------------------------------------------------------
@@ -22,6 +23,45 @@ def mostrar_pasos(pasos: list[Paso]) -> None:
                 st.latex(r"\begin{array}{l}" + lineas + r"\end{array}")
             if paso.explicacion:
                 st.markdown(paso.explicacion)
+
+
+def mostrar_tabla_pagos(pagos: tuple[Pago, ...]) -> None:
+    """Tabla con cada cuota: número, periodo, base, gradiente y pago X_k."""
+    filas = [
+        {
+            "Cuota": p.numero,
+            "Periodo": p.periodo,
+            "Base A'": formato_numero(p.base),
+            "Gradiente": formato_numero(p.gradiente),
+            "Pago Xₖ": formato_numero(p.monto),
+        }
+        for p in pagos
+    ]
+    st.dataframe(filas, hide_index=True, width="stretch")
+    st.caption("Xₖ = A' ± (k − 1)·G")
+
+
+def pedir_tasa(prefijo: str, valor_defecto: float) -> float:
+    """
+    Usa la tasa guardada en «Conversión de tasas» o pide una nueva.
+    Devuelve i en forma decimal.
+
+    prefijo       : distingue los controles de cada página (ej. "dir" -> "dir_i")
+    valor_defecto : tasa sugerida en %, si no hay tasa guardada
+    """
+    tasa = tasa_activa()
+    if tasa is not None:
+        usar = st.checkbox(
+            f"Usar la tasa en uso: {formato_porcentaje(tasa['i'])} efectiva {tasa['periodo']}",
+            value=True, key=f"{prefijo}_usar_tasa",
+        )
+        if usar:
+            return tasa["i"]
+    return st.number_input(
+        "Tasa efectiva por periodo, i (%)", min_value=0.0, value=valor_defecto, step=0.1,
+        format="%.4f", key=f"{prefijo}_i",
+        help="Debe estar en el mismo periodo que las cuotas. Si no, conviértela primero.",
+    ) / 100
 
 
 # ---------------------------------------------------------------------------

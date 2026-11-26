@@ -53,13 +53,15 @@ def _etiqueta(fig: go.Figure, x: float, altura: float, texto: str,
 
 
 def diagrama_flujo(serie: SerieGradiente, sentido: str = "egreso",
-                   equivalente: tuple[str, float, int] | None = None) -> go.Figure:
+                   equivalente: tuple[str, float, int] | None = None,
+                   mostrar_tasa: bool = True) -> go.Figure:
     """
     Construye el diagrama de flujo de caja de la serie.
 
-    serie       : la serie en gradiente
-    sentido     : "ingreso" (flechas hacia arriba) o "egreso" (hacia abajo)
-    equivalente : (nombre, valor, periodo), ej. ("P", 146111.54, 0); None = no mostrar
+    serie        : la serie en gradiente
+    sentido      : "ingreso" (flechas hacia arriba) o "egreso" (hacia abajo)
+    equivalente  : (nombre, valor, periodo), ej. ("P", 146111.54, 0); None = no mostrar
+    mostrar_tasa : False cuando la tasa no interviene (ej. hallar n por el último pago)
     """
     direccion = 1 if sentido == "ingreso" else -1
     pagos = tabla_de_pagos(serie)
@@ -96,11 +98,12 @@ def diagrama_flujo(serie: SerieGradiente, sentido: str = "egreso",
                   COLOR_EQUIVALENTE, vertical=False)
 
     # Tasa de interés, arriba del gráfico
-    fig.add_annotation(
-        x=0.5, y=1.08, xref="paper", yref="paper", showarrow=False,
-        text=f"<b>i = {formato_porcentaje(serie.i)} por periodo</b>",
-        font={"size": 14},
-    )
+    if mostrar_tasa:
+        fig.add_annotation(
+            x=0.5, y=1.08, xref="paper", yref="paper", showarrow=False,
+            text=f"<b>i = {formato_porcentaje(serie.i)} por periodo</b>",
+            font={"size": 14},
+        )
 
     limite = 2.0 if vertical else 1.6
     fig.update_xaxes(

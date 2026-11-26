@@ -220,7 +220,7 @@ En la terminal, pulsa **Ctrl + C**. Para salir del entorno virtual: `deactivate`
 ### Ingreso de datos
 
 - Los porcentajes se escriben **sin el símbolo %**: para 9,27 % escribe `9.27`.
-- En las casillas se usa **punto decimal** (`9.27`), porque Streamlit no permite cambiarlo. Los resultados se muestran con **coma decimal** (`146 111,54`), como en el libro.
+- En las casillas, el separador decimal lo decide el **navegador según su idioma**: en español muestra coma (`9,2700`), en inglés punto (`9.2700`). Escribe los decimales con el separador que veas en la casilla. Los resultados siempre se muestran con **coma decimal** (`146 111,54`), como en el libro.
 - **G siempre se escribe positivo**; si disminuye, elige *Decreciente*.
 - Los resultados se actualizan solos al cambiar cualquier dato.
 
