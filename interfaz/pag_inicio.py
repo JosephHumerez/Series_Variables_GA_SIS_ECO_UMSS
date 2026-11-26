@@ -42,5 +42,5 @@ def mostrar() -> None:
         "los pagos, conviértela primero y pulsa *Usar esta tasa*.\n"
         "2. **Cálculo directo:** P, F, A, cuotas, diagrama de flujo y procedimiento "
         "a partir de A', G, i y n.\n"
-        "3. **Despejes** *(próximamente)*: hallar n, i, A' o G."
+        "3. **Despejes:** hallar n, i, A', G, o A' y G a la vez."
     )

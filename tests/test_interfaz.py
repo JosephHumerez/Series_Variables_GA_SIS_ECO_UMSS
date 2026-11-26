@@ -93,3 +93,46 @@ def test_boton_guarda_la_tasa():
     tasa = at.session_state["tasa_activa"]
     assert tasa["i"] == pytest.approx(1.02 ** 6 - 1)
     assert tasa["periodo"] == "semestral"
+
+
+def _pagina_despejes():
+    from interfaz import pag_despejes
+    pag_despejes.mostrar()
+
+
+def _despeje(modo):
+    """Abre la página de despejes en el modo indicado, con sus datos por defecto."""
+    at = AppTest.from_function(_pagina_despejes, default_timeout=15).run()
+    at.selectbox(key="des_modo").set_value(modo).run()
+    assert not at.exception
+    assert not at.error
+    return at
+
+
+@pytest.mark.parametrize(
+    "modo, esperado",
+    [
+        ("n: con el primer y el último pago", ["11", "Decreciente"]),
+        ("A': conociendo G y P, F o A", ["1 525,12"]),
+        ("G: conociendo A' y P, F o A", ["3 000,00", "Creciente"]),
+        ("A' y G: conociendo P, F o A y una cuota Xₖ", ["30 000,00", "2 000,00", "Decreciente"]),
+        ("i: tasa de interés (método numérico)", ["0,66 %", "0,6604 %"]),
+        ("n: conociendo P, F o A (método numérico)", ["11"]),
+    ],
+)
+def test_despejes_ejercicios_del_libro(modo, esperado):
+    at = _despeje(modo)
+    assert list(at.metric.values) == esperado
+
+
+def test_despeje_n_numerico_avisa_otra_solucion():
+    at = _despeje("n: conociendo P, F o A (método numérico)")
+    assert any("valor(es) más de n" in w.value for w in at.warning)
+
+
+def test_despeje_con_datos_imposibles_muestra_error():
+    at = AppTest.from_function(_pagina_despejes, default_timeout=15).run()
+    at.selectbox(key="des_modo").set_value("i: tasa de interés (método numérico)").run()
+    at.number_input(key="des5_valor").set_value(100_000_000.0).run()
+    assert at.error
+    assert not at.exception
