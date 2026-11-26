@@ -32,7 +32,7 @@ La calculadora no solo da el resultado: muestra el **procedimiento paso a paso t
 | **Series diferidas** | Series cuya primera cuota no ocurre en el periodo 1: P se ubica un periodo antes de la primera cuota y luego se traslada al periodo 0. |
 | **Diagrama de flujo** | Línea de tiempo de 0 a n con flechas ↑ (ingresos) o ↓ (egresos) proporcionales al monto, el valor equivalente P o F y la tasa i. |
 | **Avisos** | Si en un gradiente decreciente alguna cuota llega a cero o se vuelve negativa, se avisa en qué periodo ocurre (sin bloquear el cálculo). |
-| **Despejes** *(núcleo listo, página en construcción)* | n por último pago; A' o G conociendo P, F o A; A' y G a la vez (sistema 2×2); i y n por métodos numéricos (bisección + Newton-Raphson), con interpolación lineal de referencia. |
+| **Despejes** | n por último pago; A' o G conociendo P, F o A; A' y G a la vez (sistema 2×2); i y n por métodos numéricos (bisección + Newton-Raphson), con interpolación lineal de referencia. |
 
 ---
 
@@ -128,7 +128,8 @@ Series_Variables_GA_SIS_ECO_UMSS/
 │   ├── diagrama.py            # Diagrama de flujo de caja (Plotly)
 │   ├── pag_inicio.py          # Página de inicio
 │   ├── pag_tasas.py           # Página: conversión de tasas
-│   └── pag_directo.py         # Página: cálculo directo
+│   ├── pag_directo.py         # Página: cálculo directo
+│   └── pag_despejes.py        # Página: despejes (n, A', G, i)
 │
 └── tests/                     # Pruebas automáticas
 ```
@@ -208,7 +209,7 @@ En la terminal, pulsa **Ctrl + C**. Para salir del entorno virtual: `deactivate`
 │ Conversión de      │                                          │
 │    tasas           │  [Procedimiento] [Tabla] [Cuota Xₖ]      │
 │ Cálculo directo    │                                          │
-│                    │                                          │
+│ Despejes           │                                          │
 │ Tasa en uso:       │                                          │
 │ 12,6162 % semestral│                                          │
 └────────────────────┴──────────────────────────────────────────┘
@@ -306,6 +307,27 @@ En la terminal, pulsa **Ctrl + C**. Para salir del entorno virtual: `deactivate`
 1. Con los datos del Ejemplo 1, cambia **n** a `20`.
 2. Aparece un aviso amarillo: la cuota 16 vale cero y desde ahí las cuotas serían negativas, o sea que el flujo cambia de sentido. En el diagrama se ven en naranja apuntando al lado contrario.
 
+### Ejemplo 6: Despejes
+
+Abre **Despejes** en el menú y elige en *¿Qué deseas hallar?* la incógnita. Cada opción viene cargada con un ejercicio del libro:
+
+| Opción | Datos por defecto | Resultado |
+|---|---|---|
+| n: con el primer y el último pago | A' = 30 000, último = 10 000, G = 2 000 | n = 11, decreciente |
+| A': conociendo G y P, F o A | P = 8 000, G = 500 ↑, i = 15 %, n = 5 | A' = 1 525,12 |
+| G: conociendo A' y P, F o A | F = 538 445,20, A' = 27 000, i = 0,66 %, n = 12 | G = 3 000, creciente |
+| A' y G: conociendo P, F o A y una cuota Xₖ | P = 146 111,54, X₁₁ = 10 000, i = 9,27 %, n = 11 | A' = 30 000, G = 2 000, decreciente |
+| i: tasa de interés (método numérico) | F = 538 445,20, A' = 27 000, G = 3 000 ↑, n = 12 | i = 0,66 % (interpolada: 0,6596 %) |
+| n: conociendo P, F o A (método numérico) | P = 146 111,54, A' = 30 000, G = 2 000 ↓, i = 9,27 % | n = 11 |
+
+Debajo de los resultados aparecen:
+- El **diagrama** de la serie hallada, con el dato conocido (P o F) en rojo.
+- **Procedimiento:** el despeje paso a paso, por ejemplo la regla de Cramer en el sistema 2×2 o la interpolación lineal en el despeje de i.
+- **Verificación:** el cálculo directo con la serie hallada, que debe reproducir el dato conocido.
+- **Tabla de pagos.**
+
+> **Nota:** al despejar G, el **signo** del resultado indica el tipo de gradiente: si sale negativo, es decreciente. En el despeje numérico de n del Ejercicio 1 aparece un aviso de que existe otra solución; corresponde a una serie con cuotas negativas y por eso se muestra la menor (n = 11).
+
 ---
 
 ## Pruebas automáticas
@@ -356,4 +378,4 @@ Además de los ejercicios, las pruebas verifican:
 | Página de inicio | Completo |
 | Página de conversión de tasas | Completo |
 | Página de cálculo directo con diagrama de flujo | Completo |
-| Página de despejes (n, i, A', G, sistema 2×2) | En construcción |
+| Página de despejes (n, i, A', G, sistema 2×2) | Completo |
