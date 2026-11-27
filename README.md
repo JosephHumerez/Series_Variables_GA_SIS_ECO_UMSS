@@ -125,6 +125,7 @@ Series_Variables_GA_SIS_ECO_UMSS/
 │
 ├── interfaz/                  # INTERFAZ WEB (Streamlit)
 │   ├── comun.py               # Piezas compartidas (pasos, tasa en uso)
+│   ├── estilo.py              # Código de colores, tarjetas y leyenda
 │   ├── diagrama.py            # Diagrama de flujo de caja (Plotly)
 │   ├── pag_inicio.py          # Página de inicio
 │   ├── pag_tasas.py           # Página: conversión de tasas
@@ -217,6 +218,27 @@ En la terminal, pulsa **Ctrl + C**. Para salir del entorno virtual: `deactivate`
 
 - **Menú lateral:** cambia de página.
 - **Tasa en uso:** la tasa guardada desde *Conversión de tasas*; las páginas de cálculo la toman automáticamente.
+
+### Código de colores
+
+Cada concepto tiene **siempre el mismo color** en toda la aplicación: en las etiquetas de los datos, las tarjetas de resultado, el resultado de cada paso del procedimiento, el diagrama y la tabla de pagos. La leyenda también aparece en la barra lateral.
+
+| Color | Concepto |
+|---|---|
+| Azul | A', Xₖ: primer pago y cuotas (base) |
+| Naranja | G: gradiente |
+| Violeta | A: anualidad equivalente |
+| Verde | P: valor presente |
+| Rojo | F: valor futuro |
+| Amarillo | i: tasa de interés |
+| Gris | n: número de periodos |
+
+En el **diagrama de flujo**, cada flecha muestra la descomposición del libro:
+- **Gradiente creciente:** tramo azul (la base A') y encima un tramo naranja (lo que suma el gradiente).
+- **Gradiente decreciente:** flecha azul (la cuota) y un tramo naranja punteado (lo que el gradiente le restó a la base).
+- Una línea azul punteada marca el nivel de A'.
+
+Los colores se definen en un solo lugar: [`interfaz/estilo.py`](interfaz/estilo.py).
 
 ### Ingreso de datos
 
