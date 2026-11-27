@@ -96,8 +96,18 @@ def _rgba(hex_color: str, opacidad: float) -> str:
     return f"rgba({r}, {g}, {b}, {opacidad})"
 
 
+# Barra lateral más compacta, para que todo se vea sin hacer scroll
+CSS_BARRA_LATERAL = """
+[data-testid="stSidebarHeader"] { display: none; }
+[data-testid="stSidebarUserContent"] { padding-top: 0.25rem; padding-bottom: 0.5rem; }
+[data-testid="stSidebarNav"] { padding-top: 1rem; }
+[data-testid="stSidebar"] hr { margin: 0.5rem 0; }
+[data-testid="stSidebarUserContent"] [data-testid="stVerticalBlock"] { gap: 0.4rem; }
+"""
+
+
 def aplicar_estilos() -> None:
-    """Inserta el CSS de las tarjetas de color. Se llama una vez en app.py."""
+    """Inserta el CSS de las tarjetas de color y de la barra lateral. Se llama una vez en app.py."""
     reglas = [
         f'div[class*="st-key-tarjeta-{concepto}-"] {{'
         f"border-left: 0.4rem solid {c.hex};"
@@ -105,7 +115,7 @@ def aplicar_estilos() -> None:
         "border-radius: 0.6rem; padding: 0.7rem 1rem; }"
         for concepto, c in COLORES.items()
     ]
-    st.html("<style>" + "\n".join(reglas) + "</style>")
+    st.html("<style>" + "\n".join(reglas) + CSS_BARRA_LATERAL + "</style>")
 
 
 # ---------------------------------------------------------------------------
@@ -113,8 +123,8 @@ def aplicar_estilos() -> None:
 # ---------------------------------------------------------------------------
 
 def mostrar_leyenda() -> None:
-    """Código de colores en la barra lateral."""
+    """Código de colores compacto en la barra lateral: insignias que fluyen en pocas líneas."""
     with st.sidebar:
         st.divider()
         st.markdown("**Código de colores**")
-        st.markdown("  \n".join(f"{insignia(k)} {c.significado}" for k, c in COLORES.items()))
+        st.markdown(" ".join(insignia(k, f"{c.simbolo} {c.corto}") for k, c in COLORES.items()))
