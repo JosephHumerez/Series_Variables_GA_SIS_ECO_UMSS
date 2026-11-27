@@ -43,4 +43,5 @@ navegacion.run()
 comun.mostrar_tasa_activa_en_barra()
 estilo.mostrar_leyenda()
 with st.sidebar:
-    st.caption("Ingeniería Económica · M. Sc. Emir Vargas Peredo · Unidad 2")
+    st.divider()
+    st.caption(":material/menu_book: *Ingeniería Económica*, M. Sc. Emir Vargas Peredo · Unidad 2")

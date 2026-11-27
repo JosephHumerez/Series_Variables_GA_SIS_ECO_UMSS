@@ -96,13 +96,13 @@ def _rgba(hex_color: str, opacidad: float) -> str:
     return f"rgba({r}, {g}, {b}, {opacidad})"
 
 
-# Barra lateral más compacta, para que todo se vea sin hacer scroll
+# Barra lateral: se quita el encabezado vacío (ahí estaba el botón para cerrarla)
+# y se reducen un poco los márgenes, manteniendo el espaciado normal del sistema.
 CSS_BARRA_LATERAL = """
 [data-testid="stSidebarHeader"] { display: none; }
-[data-testid="stSidebarUserContent"] { padding-top: 0.25rem; padding-bottom: 0.5rem; }
 [data-testid="stSidebarNav"] { padding-top: 1rem; }
-[data-testid="stSidebar"] hr { margin: 0.5rem 0; }
-[data-testid="stSidebarUserContent"] [data-testid="stVerticalBlock"] { gap: 0.4rem; }
+[data-testid="stSidebarUserContent"] { padding-top: 0.5rem; }
+[data-testid="stSidebar"] hr { margin: 0.75rem 0; }
 """
 
 
@@ -123,8 +123,8 @@ def aplicar_estilos() -> None:
 # ---------------------------------------------------------------------------
 
 def mostrar_leyenda() -> None:
-    """Código de colores compacto en la barra lateral: insignias que fluyen en pocas líneas."""
+    """Código de colores en la barra lateral: un concepto por línea, como en Inicio."""
     with st.sidebar:
         st.divider()
-        st.markdown("**Código de colores**")
-        st.markdown(" ".join(insignia(k, f"{c.simbolo} {c.corto}") for k, c in COLORES.items()))
+        st.markdown("**:material/palette: Código de colores**")
+        st.markdown("  \n".join(f"{insignia(k)}&nbsp; {c.significado}" for k, c in COLORES.items()))
