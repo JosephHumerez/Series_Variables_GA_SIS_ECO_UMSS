@@ -29,16 +29,17 @@ class Color:
     hex: str           # código del color (para el diagrama, las fórmulas y el CSS)
     simbolo: str       # símbolo del concepto
     significado: str   # descripción para la leyenda
+    corto: str         # descripción breve (leyenda de la barra lateral)
 
 
 COLORES = {
-    "cuota": Color("blue", "#1c83e1", "A', Xₖ", "Primer pago y cuotas"),
-    "G": Color("orange", "#ff8700", "G", "Gradiente"),
-    "A": Color("violet", "#803df5", "A", "Anualidad equivalente"),
-    "P": Color("green", "#21c354", "P", "Valor presente"),
-    "F": Color("red", "#ff4b4b", "F", "Valor futuro"),
-    "i": Color("yellow", "#d4a106", "i", "Tasa de interés"),
-    "n": Color("gray", "#808495", "n", "Número de periodos"),
+    "cuota": Color("blue", "#1c83e1", "A', Xₖ", "Primer pago y cuotas", "cuotas"),
+    "G": Color("orange", "#ff8700", "G", "Gradiente", "gradiente"),
+    "A": Color("violet", "#803df5", "A", "Anualidad equivalente", "anualidad"),
+    "P": Color("green", "#21c354", "P", "Valor presente", "presente"),
+    "F": Color("red", "#ff4b4b", "F", "Valor futuro", "futuro"),
+    "i": Color("yellow", "#d4a106", "i", "Tasa de interés", "tasa"),
+    "n": Color("gray", "#808495", "n", "Número de periodos", "periodos"),
 }
 
 

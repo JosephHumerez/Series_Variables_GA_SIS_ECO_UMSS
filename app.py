@@ -18,6 +18,7 @@ st.set_page_config(
     page_title="Calculadora de Gradiente Aritmético",
     page_icon=":material/functions:",
     layout="wide",
+    initial_sidebar_state="locked",   # la barra lateral no se puede esconder (en computadora)
 )
 
 # Colores de las tarjetas de resultado (ver interfaz/estilo.py)
@@ -35,12 +36,11 @@ navegacion = st.navigation([
             url_path="despejes"),
 ])
 
-with st.sidebar:
-    st.caption("Ingeniería Económica · M. Sc. Emir Vargas Peredo · Unidad 2")
-
 # Dibuja la página elegida
 navegacion.run()
 
-# Se dibuja DESPUÉS de la página, para que muestre la tasa recién guardada
+# Barra lateral. Se dibuja DESPUÉS de la página, para que muestre la tasa recién guardada
 comun.mostrar_tasa_activa_en_barra()
 estilo.mostrar_leyenda()
+with st.sidebar:
+    st.caption("Ingeniería Económica · M. Sc. Emir Vargas Peredo · Unidad 2")

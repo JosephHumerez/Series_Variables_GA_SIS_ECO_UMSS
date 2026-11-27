@@ -7,7 +7,7 @@ import streamlit as st
 
 from gradiente.procedimiento import Paso, formato_numero, formato_porcentaje
 from gradiente.serie import Pago
-from interfaz.estilo import COLORES, coloreado, concepto_de_ecuacion, latex_coloreado, tarjeta
+from interfaz.estilo import COLORES, coloreado, concepto_de_ecuacion, insignia, latex_coloreado
 
 
 # ---------------------------------------------------------------------------
@@ -107,17 +107,19 @@ def borrar_tasa() -> None:
 
 
 def mostrar_tasa_activa_en_barra() -> None:
-    """Recuadro en la barra lateral con la tasa que se está usando."""
+    """Línea compacta en la barra lateral con la tasa que se está usando."""
     tasa = tasa_activa()
     with st.sidebar:
         st.divider()
         st.markdown("**Tasa en uso**")
         if tasa is None:
-            st.caption("Ninguna. Puedes convertir una en «Conversión de tasas» "
-                       "o escribirla directamente en cada cálculo.")
+            st.caption("Ninguna guardada.")
             return
-        tarjeta("i", f"efectiva {tasa['periodo']}", formato_porcentaje(tasa["i"]), clave="barra")
-        st.caption(tasa["descripcion"])
-        if st.button("Quitar tasa", key="quitar_tasa", icon=":material/close:"):
+        texto, boton = st.columns([5, 1], vertical_alignment="center")
+        texto.markdown(f"{insignia('i', 'i = ' + formato_porcentaje(tasa['i']))} "
+                       f"efectiva {tasa['periodo']}")
+        if boton.button("", key="quitar_tasa", icon=":material/close:", type="tertiary",
+                        help="Quitar la tasa guardada"):
             borrar_tasa()
             st.rerun()
+        st.caption(tasa["descripcion"])
