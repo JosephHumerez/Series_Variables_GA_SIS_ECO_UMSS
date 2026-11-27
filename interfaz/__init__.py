@@ -12,4 +12,7 @@ Módulos:
     diagrama    -> diagrama de flujo de caja (Plotly)
     pag_directo -> página 2: cálculo directo (A, P, F, X_k)
     pag_despejes -> página 3: despejes (n, A', G, A' y G, i)
+    pag_teoria  -> marco teórico (manual con enlaces a las páginas de práctica)
+    estilo      -> código de colores, tarjetas y leyenda
+    paginas     -> registro de las páginas y secciones del menú
 """

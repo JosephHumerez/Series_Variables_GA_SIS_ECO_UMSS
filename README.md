@@ -27,6 +27,7 @@ La calculadora no solo da el resultado: muestra el **procedimiento paso a paso t
 
 | Módulo | Qué hace |
 |---|---|
+| **Marco teórico** | Manual para aprender el tema desde cero, en 7 capítulos: conceptos básicos, tasas de interés, factores financieros, gradiente aritmético (con el Ejercicio 1 resuelto), series diferidas, despejes y un resumen de fórmulas. Cada capítulo termina con un enlace a la página donde se practica. |
 | **Conversión de tasas** | Convierte una tasa nominal (con cualquier capitalización) o efectiva a la **tasa efectiva del periodo de pago**. Periodicidades: mensual, bimestral, trimestral, cuatrimestral, semestral y anual. |
 | **Cálculo directo** | Con A', G, i, n y el tipo de gradiente calcula la **anualidad equivalente A** (desglosada en base + gradiente), el **valor presente P**, el **valor futuro F** y cualquier cuota **Xₖ**. |
 | **Series diferidas** | Series cuya primera cuota no ocurre en el periodo 1: P se ubica un periodo antes de la primera cuota y luego se traslada al periodo 0. |
@@ -127,7 +128,9 @@ Series_Variables_GA_SIS_ECO_UMSS/
 │   ├── comun.py               # Piezas compartidas (pasos, tasa en uso)
 │   ├── estilo.py              # Código de colores, tarjetas y leyenda
 │   ├── diagrama.py            # Diagrama de flujo de caja (Plotly)
+│   ├── paginas.py             # Registro de páginas y secciones del menú
 │   ├── pag_inicio.py          # Página de inicio
+│   ├── pag_teoria.py          # Página: marco teórico (manual)
 │   ├── pag_tasas.py           # Página: conversión de tasas
 │   ├── pag_directo.py         # Página: cálculo directo
 │   └── pag_despejes.py        # Página: despejes (n, A', G, i)
@@ -203,20 +206,24 @@ En la terminal, pulsa **Ctrl + C**. Para salir del entorno virtual: `deactivate`
 ### Partes de la pantalla
 
 ```
-┌────────────────────┬──────────────────────────────────────────┐
-│ BARRA LATERAL      │  CONTENIDO DE LA PÁGINA                  │
-│                    │                                          │
-│ Inicio             │  Datos  →  Resultados  →  Diagrama       │
-│ Conversión de      │                                          │
-│    tasas           │  [Procedimiento] [Tabla] [Cuota Xₖ]      │
-│ Cálculo directo    │                                          │
-│ Despejes           │                                          │
-│ Tasa en uso:       │                                          │
-│ 12,6162 % semestral│                                          │
-└────────────────────┴──────────────────────────────────────────┘
+┌──────────────────────┬────────────────────────────────────────┐
+│ BARRA LATERAL        │  CONTENIDO DE LA PÁGINA                │
+│                      │                                        │
+│ GENERAL              │  Datos  →  Resultados  →  Diagrama     │
+│   Inicio             │                                        │
+│ APRENDER             │  [Procedimiento] [Tabla] [Cuota Xₖ]    │
+│   Marco teórico      │                                        │
+│ PRACTICAR            │                                        │
+│   Conversión de tasas│                                        │
+│   Cálculo directo    │                                        │
+│   Despejes           │                                        │
+│ ──────────────────── │                                        │
+│ Tasa en uso          │                                        │
+│ Código de colores    │                                        │
+└──────────────────────┴────────────────────────────────────────┘
 ```
 
-- **Menú lateral:** cambia de página.
+- **Menú lateral:** cambia de página. Está agrupado en *General*, *Aprender* (el manual) y *Practicar* (las calculadoras). La barra no se puede esconder.
 - **Tasa en uso:** la tasa guardada desde *Conversión de tasas*; las páginas de cálculo la toman automáticamente.
 - **Tema claro u oscuro:** en el menú **⋮** (arriba a la derecha) se elige *Light*, *Dark* o *System*, que sigue la configuración del sistema operativo.
 
@@ -251,6 +258,8 @@ Los colores se definen en un solo lugar: [`interfaz/estilo.py`](interfaz/estilo.
 ---
 
 ## Tutorial
+
+> **¿Primera vez con el tema?** Empieza por **Marco teórico** en el menú (sección *Aprender*). Es un manual con la teoría, las fórmulas y ejemplos resueltos; al final de cada capítulo, el botón **Ir a…** lleva a la página donde se practica lo aprendido.
 
 ### Ejemplo 1: Gradiente decreciente, valor presente (Ejercicio 1 del libro, pág. 35)
 
@@ -399,6 +408,7 @@ Además de los ejercicios, las pruebas verifican:
 |---|---|
 | Núcleo matemático (factores, tasas, serie, despejes, métodos numéricos, procedimiento) | Completo y probado |
 | Página de inicio | Completo |
+| Marco teórico (manual con enlaces a la práctica) | Completo |
 | Página de conversión de tasas | Completo |
 | Página de cálculo directo con diagrama de flujo | Completo |
 | Página de despejes (n, i, A', G, sistema 2×2) | Completo |

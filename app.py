@@ -11,7 +11,7 @@ está en la carpeta "interfaz" y toda la matemática en la carpeta "gradiente".
 
 import streamlit as st
 
-from interfaz import comun, estilo, pag_despejes, pag_directo, pag_inicio, pag_tasas
+from interfaz import comun, estilo, paginas
 
 
 st.set_page_config(
@@ -24,17 +24,8 @@ st.set_page_config(
 # Colores de las tarjetas de resultado (ver interfaz/estilo.py)
 estilo.aplicar_estilos()
 
-# Menú lateral con las páginas de la aplicación
-navegacion = st.navigation([
-    st.Page(pag_inicio.mostrar, title="Inicio", icon=":material/home:",
-            url_path="inicio", default=True),
-    st.Page(pag_tasas.mostrar, title="Conversión de tasas", icon=":material/percent:",
-            url_path="tasas"),
-    st.Page(pag_directo.mostrar, title="Cálculo directo", icon=":material/calculate:",
-            url_path="directo"),
-    st.Page(pag_despejes.mostrar, title="Despejes", icon=":material/function:",
-            url_path="despejes"),
-])
+# Menú lateral agrupado en secciones (las páginas se definen en interfaz/paginas.py)
+navegacion = st.navigation(paginas.SECCIONES)
 
 # Dibuja la página elegida
 navegacion.run()
@@ -44,4 +35,4 @@ comun.mostrar_tasa_activa_en_barra()
 estilo.mostrar_leyenda()
 with st.sidebar:
     st.divider()
-    st.caption(":material/menu_book: *Ingeniería Económica*, M. Sc. Emir Vargas Peredo · Unidad 2")
+    st.caption(":material/book: *Ingeniería Económica*, M. Sc. Emir Vargas Peredo · Unidad 2")

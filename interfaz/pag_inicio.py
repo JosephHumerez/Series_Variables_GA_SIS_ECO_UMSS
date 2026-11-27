@@ -54,20 +54,26 @@ def mostrar() -> None:
             st.markdown(f"{insignia(concepto)}  \n{color.significado}")
 
     # ------------------------------------------------------------------
+    # Se importa aquí (y no arriba) porque paginas.py importa este módulo
+    from interfaz import paginas
+
     st.subheader(":material/route: Cómo usarla")
     pasos = [
-        ("i", ":material/percent:", "1. Conversión de tasas",
+        ("A", paginas.TEORIA, "1. Aprende la teoría",
+         "Si es tu primera vez con el tema, empieza por el manual: conceptos, fórmulas "
+         "y ejemplos resueltos."),
+        ("i", paginas.TASAS, "2. Convierte la tasa",
          "Si la tasa del problema no está en el periodo de los pagos, conviértela "
          "y pulsa **Usar esta tasa**."),
-        ("P", ":material/calculate:", "2. Cálculo directo",
+        ("P", paginas.DIRECTO, "3. Cálculo directo",
          "A partir de A', G, i y n obtén A, P, F, las cuotas, el diagrama de flujo "
          "y el procedimiento del libro."),
-        ("G", ":material/function:", "3. Despejes",
+        ("G", paginas.DESPEJES, "4. Despejes",
          "Halla la incógnita que falte: n, i, A', G, o A' y G a la vez."),
     ]
-    for columna, (concepto, icono, titulo, texto) in zip(st.columns(3), pasos):
+    for columna, (concepto, pagina, titulo, texto) in zip(st.columns(4), pasos):
         with columna, st.container(key=f"tarjeta-{concepto}-inicio", height="stretch"):
-            st.markdown(f"#### {icono} {titulo}")
+            st.markdown(f"#### {titulo}")
             st.markdown(texto)
-    st.caption("Las páginas están en el menú lateral. Cada una viene cargada con un "
-               "ejercicio resuelto del libro.")
+            st.page_link(pagina, label=f"Ir a {pagina.title}", icon=":material/arrow_forward:")
+    st.caption("Cada página de cálculo viene cargada con un ejercicio resuelto del libro.")

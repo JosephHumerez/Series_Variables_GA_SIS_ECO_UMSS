@@ -136,3 +136,38 @@ def test_despeje_con_datos_imposibles_muestra_error():
     at.number_input(key="des5_valor").set_value(1_000.0).run()
     assert at.error
     assert not at.exception
+
+
+def _app_desde_teoria():
+    import streamlit as st
+    from interfaz import paginas
+    actual = st.navigation(paginas.SECCIONES)
+    if actual.url_path != "teoria":
+        st.switch_page(paginas.TEORIA)
+    actual.run()
+
+
+def test_marco_teorico_carga_con_capitulos_y_enlaces():
+    at = AppTest.from_function(_app_desde_teoria, default_timeout=20).run()
+    assert not at.exception
+    assert len(at.tabs) == 7
+    enlaces = [e.proto.page for e in at.get("page_link")]
+    assert enlaces.count("tasas") == 1
+    assert enlaces.count("directo") == 2
+    assert enlaces.count("despejes") == 1
+
+
+def test_marco_teorico_ejemplos_calculados_con_el_nucleo():
+    at = AppTest.from_function(_app_desde_teoria, default_timeout=20).run()
+    textos = " ".join(m.value for m in at.markdown)
+    assert "1 331,00" in textos
+    latex = " ".join(l.value for l in at.latex)
+    assert r"146\,111{,}54" in latex
+    assert r"12{,}6162" in latex
+
+
+def test_inicio_tiene_enlaces_a_todas_las_paginas():
+    at = AppTest.from_file(APP, default_timeout=20).run()
+    assert not at.exception
+    enlaces = [e.proto.page for e in at.get("page_link")]
+    assert enlaces == ["teoria", "tasas", "directo", "despejes"]
