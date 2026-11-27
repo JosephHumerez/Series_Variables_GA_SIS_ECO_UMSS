@@ -26,15 +26,20 @@ from gradiente.procedimiento import (
 from gradiente.serie import SerieGradiente, calcular
 from interfaz.comun import mostrar_pasos, mostrar_tabla_pagos, pedir_tasa
 from interfaz.diagrama import diagrama_flujo
+from interfaz.estilo import coloreado, tarjeta
 
 
 NOMBRE_DATO = {"P": "P (valor presente)", "F": "F (valor futuro)", "A": "A (anualidad equivalente)"}
+A_PRIMA = coloreado("cuota", "A'")   # "A'" en azul, para las etiquetas
+
+# Un resultado se muestra como tarjeta: (concepto del color, símbolo, título, valor)
+Resultado = tuple[str, str, str, str]
 
 
 @dataclass
 class Salida:
     """Todo lo que la página muestra después de resolver un despeje."""
-    metricas: list[tuple[str, str]]          # (etiqueta, valor) de los recuadros de resultado
+    metricas: list[Resultado]                # tarjetas de resultado
     pasos: list[Paso]                        # procedimiento del despeje
     serie: SerieGradiente                    # serie completa ya resuelta
     sentido: str                             # "ingreso" o "egreso" (para el diagrama)

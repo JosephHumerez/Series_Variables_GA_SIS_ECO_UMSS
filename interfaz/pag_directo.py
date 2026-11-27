@@ -14,6 +14,9 @@ from gradiente.procedimiento import formato_numero, procedimiento_cuota, procedi
 from gradiente.serie import SerieGradiente, calcular
 from interfaz.comun import mostrar_pasos, mostrar_tabla_pagos, pedir_tasa
 from interfaz.diagrama import diagrama_flujo
+from interfaz.estilo import coloreado, tarjeta
+
+A_PRIMA = coloreado("cuota", "A'")   # "A'" en azul, para las etiquetas
 
 
 def mostrar() -> None:
@@ -25,15 +28,16 @@ def mostrar() -> None:
     # ------------------------------------------------------------------
     col1, col2, col3 = st.columns(3)
     with col1:
-        A_prima = st.number_input("Primer pago, A'", value=30_000.0, step=100.0,
-                                  format="%.2f", key="dir_A")
-        G = st.number_input("Gradiente, G", min_value=0.0, value=2_000.0, step=100.0,
-                            format="%.2f", key="dir_G",
+        A_prima = st.number_input(f"Primer pago, {A_PRIMA}",
+                                  value=30_000.0, step=100.0, format="%.2f", key="dir_A")
+        G = st.number_input(f"Gradiente, {coloreado('G', 'G')}", min_value=0.0, value=2_000.0,
+                            step=100.0, format="%.2f", key="dir_G",
                             help="Siempre positivo. El sentido se elige en «Tipo de gradiente».")
     with col2:
         tipo = st.radio("Tipo de gradiente", ["Creciente", "Decreciente"], index=1,
                         horizontal=True, key="dir_tipo")
-        n = st.number_input("Número de cuotas, n", min_value=1, value=11, step=1, key="dir_n")
+        n = st.number_input(f"Número de cuotas, {coloreado('n', 'n')}", min_value=1, value=11,
+                            step=1, key="dir_n")
     with col3:
         i = pedir_tasa("dir", 9.27)
 
@@ -65,13 +69,19 @@ def mostrar() -> None:
     st.divider()
     signo = "+" if serie.signo > 0 else "−"
     m1, m2, m3, m4 = st.columns(4)
-    m1.metric("Anualidad equivalente, A", formato_numero(r.A),
-              help=f"A = A' {signo} G·(A/G) = {formato_numero(A_prima)} {signo} "
-                   f"{formato_numero(abs(r.A_gradiente))}")
-    m2.metric("Valor presente, P", formato_numero(r.P), help="Ubicado en el periodo 0.")
-    m3.metric("Valor futuro, F", formato_numero(r.F),
-              help=f"Ubicado en el periodo {serie.periodo_final}.")
-    m4.metric(f"Última cuota, X{serie.n}", formato_numero(r.pagos[-1].monto))
+    with m1:
+        tarjeta("A", "Anualidad equivalente", formato_numero(r.A), clave="dir",
+                ayuda=f"A = A' {signo} G·(A/G) = {formato_numero(A_prima)} {signo} "
+                      f"{formato_numero(abs(r.A_gradiente))}")
+    with m2:
+        tarjeta("P", "Valor presente", formato_numero(r.P), clave="dir",
+                ayuda="Ubicado en el periodo 0.")
+    with m3:
+        tarjeta("F", "Valor futuro", formato_numero(r.F), clave="dir",
+                ayuda=f"Ubicado en el periodo {serie.periodo_final}.")
+    with m4:
+        tarjeta("cuota", "Última cuota", formato_numero(r.pagos[-1].monto), clave="dir",
+                simbolo=f"X{serie.n}")
 
     for aviso in r.avisos:
         st.warning(aviso, icon=":material/warning:")

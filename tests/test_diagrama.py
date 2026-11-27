@@ -6,7 +6,9 @@ Ejecutar desde la carpeta del proyecto:
 """
 
 from gradiente.serie import SerieGradiente
-from interfaz.diagrama import COLOR_CUOTA_NEGATIVA, COLOR_EQUIVALENTE, diagrama_flujo
+from interfaz.diagrama import (
+    COLOR_BASE, COLOR_CUOTA_NEGATIVA, COLOR_GRADIENTE, COLORES_EQUIVALENTE, diagrama_flujo,
+)
 
 
 def flechas(fig):
@@ -39,9 +41,30 @@ def test_altura_proporcional_al_monto():
 
 def test_equivalente_en_sentido_contrario():
     fig = diagrama_flujo(SERIE_EJ1, "egreso", equivalente=("P", 146_111.54, 0))
-    roja = [a for a in flechas(fig) if a.arrowcolor == COLOR_EQUIVALENTE]
-    assert len(roja) == 1
-    assert roja[0].x == 0 and roja[0].y > 0
+    verde = [a for a in flechas(fig) if a.arrowcolor == COLORES_EQUIVALENTE["P"]]
+    assert len(verde) == 1
+    assert verde[0].x == 0 and verde[0].y > 0
+
+
+def test_creciente_muestra_base_azul_y_gradiente_naranja():
+    serie = SerieGradiente(A_prima=1_000, G=200, i=0.05, n=4, tipo="creciente")
+    fig = diagrama_flujo(serie, "ingreso")
+    puntas = flechas(fig)
+    assert puntas[0].arrowcolor == COLOR_BASE
+    assert all(a.arrowcolor == COLOR_GRADIENTE for a in puntas[1:])
+    assert all(a.ay == 1_000 / 1_600 for a in puntas[1:])
+
+
+def test_decreciente_muestra_lo_restado_punteado():
+    fig = diagrama_flujo(SERIE_EJ1, "ingreso")
+    punteados = [s for s in fig.layout.shapes if s.line.dash == "dot"]
+    assert len(punteados) == 10
+    assert all(s.line.color == COLOR_GRADIENTE for s in punteados)
+
+
+def test_leyenda():
+    fig = diagrama_flujo(SERIE_EJ1, "egreso", equivalente=("F", 387_431.46, 11))
+    assert [t.name for t in fig.data] == ["Base A'", "Gradiente (resta)", "Valor futuro F"]
 
 
 def test_cuota_negativa_cambia_de_sentido_y_color():

@@ -2,10 +2,12 @@
 Piezas compartidas por todas las páginas de la interfaz.
 """
 
+import pandas as pd
 import streamlit as st
 
 from gradiente.procedimiento import Paso, formato_numero, formato_porcentaje
 from gradiente.serie import Pago
+from interfaz.estilo import COLORES, coloreado, concepto_de_ecuacion, latex_coloreado, tarjeta
 
 
 # ---------------------------------------------------------------------------
@@ -13,21 +15,28 @@ from gradiente.serie import Pago
 # ---------------------------------------------------------------------------
 
 def mostrar_pasos(pasos: list[Paso]) -> None:
-    """Dibuja cada paso en un recuadro: título, ecuaciones (LaTeX) y explicación."""
+    """
+    Dibuja cada paso en un recuadro: título, ecuaciones (LaTeX) y explicación.
+    La última ecuación (el resultado del paso) se enmarca con el color de su variable.
+    """
     for paso in pasos:
         with st.container(border=True):
             st.markdown(f"**{paso.titulo}**")
             if paso.ecuaciones:
+                ecuaciones = list(paso.ecuaciones)
+                concepto = concepto_de_ecuacion(ecuaciones[-1])
+                if concepto is not None:
+                    ecuaciones[-1] = latex_coloreado(concepto, rf"\boxed{{{ecuaciones[-1]}}}")
                 # Todas las líneas del paso en un solo bloque, alineadas a la izquierda
-                lineas = r" \\[6pt] ".join(paso.ecuaciones)
+                lineas = r" \\[6pt] ".join(ecuaciones)
                 st.latex(r"\begin{array}{l}" + lineas + r"\end{array}")
             if paso.explicacion:
                 st.markdown(paso.explicacion)
 
 
 def mostrar_tabla_pagos(pagos: tuple[Pago, ...]) -> None:
-    """Tabla con cada cuota: número, periodo, base, gradiente y pago X_k."""
-    filas = [
+    """Tabla con cada cuota: base en azul, gradiente en naranja y pago en negrita."""
+    tabla = pd.DataFrame([
         {
             "Cuota": p.numero,
             "Periodo": p.periodo,
@@ -36,9 +45,17 @@ def mostrar_tabla_pagos(pagos: tuple[Pago, ...]) -> None:
             "Pago Xₖ": formato_numero(p.monto),
         }
         for p in pagos
-    ]
-    st.dataframe(filas, hide_index=True, width="stretch")
-    st.caption("Xₖ = A' ± (k − 1)·G")
+    ])
+    con_color = (
+        tabla.style
+        .set_properties(subset=["Base A'"], color=COLORES["cuota"].hex)
+        .set_properties(subset=["Gradiente"], color=COLORES["G"].hex)
+        .set_properties(subset=["Pago Xₖ"], **{"font-weight": "bold"})
+    )
+    st.dataframe(con_color, hide_index=True, width="stretch")
+    base = coloreado("cuota", "A'")
+    gradiente = coloreado("G", "G")
+    st.caption(f"Xₖ = {base} ± (k − 1)·{gradiente}")
 
 
 def pedir_tasa(prefijo: str, valor_defecto: float) -> float:
@@ -58,7 +75,8 @@ def pedir_tasa(prefijo: str, valor_defecto: float) -> float:
         if usar:
             return tasa["i"]
     return st.number_input(
-        "Tasa efectiva por periodo, i (%)", min_value=0.0, value=valor_defecto, step=0.1,
+        f"Tasa efectiva por periodo, {coloreado('i', 'i')} (%)", min_value=0.0,
+        value=valor_defecto, step=0.1,
         format="%.4f", key=f"{prefijo}_i",
         help="Debe estar en el mismo periodo que las cuotas. Si no, conviértela primero.",
     ) / 100
@@ -98,8 +116,7 @@ def mostrar_tasa_activa_en_barra() -> None:
             st.caption("Ninguna. Puedes convertir una en «Conversión de tasas» "
                        "o escribirla directamente en cada cálculo.")
             return
-        st.success(f"{formato_porcentaje(tasa['i'])} efectiva {tasa['periodo']}",
-                   icon=":material/percent:")
+        tarjeta("i", f"efectiva {tasa['periodo']}", formato_porcentaje(tasa["i"]), clave="barra")
         st.caption(tasa["descripcion"])
         if st.button("Quitar tasa", key="quitar_tasa", icon=":material/close:"):
             borrar_tasa()
