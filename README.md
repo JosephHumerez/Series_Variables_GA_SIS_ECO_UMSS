@@ -218,6 +218,7 @@ En la terminal, pulsa **Ctrl + C**. Para salir del entorno virtual: `deactivate`
 
 - **Menú lateral:** cambia de página.
 - **Tasa en uso:** la tasa guardada desde *Conversión de tasas*; las páginas de cálculo la toman automáticamente.
+- **Tema claro u oscuro:** en el menú **⋮** (arriba a la derecha) se elige *Light*, *Dark* o *System*, que sigue la configuración del sistema operativo.
 
 ### Código de colores
 

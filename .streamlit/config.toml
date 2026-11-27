@@ -1,7 +1,19 @@
-# Tema visual de la calculadora.
-# Funciona con el modo claro y el oscuro del navegador.
+# Configuración visual de la calculadora.
 
-[theme]
-# Color principal (botones, selección de opciones, enlaces): azul,
+[client]
+# Oculta las opciones de desarrollador del menú superior derecho
+# (botón Deploy, Rerun, Clear cache). Quedan las opciones para quien usa
+# la aplicación: elegir tema (claro, oscuro o según el sistema), imprimir y grabar pantalla.
+# Para volver a ver las opciones de desarrollador, cambiar a "auto".
+toolbarMode = "viewer"
+
+# Se definen DOS temas (claro y oscuro) para que el menú permita elegir entre
+# claro, oscuro o según el sistema. Con un solo [theme] el selector desaparece.
+# En ambos, el color principal (botones y selección de opciones) es azul,
 # el mismo color que las cuotas en el código de colores.
+
+[theme.light]
+primaryColor = "#1c83e1"
+
+[theme.dark]
 primaryColor = "#1c83e1"
