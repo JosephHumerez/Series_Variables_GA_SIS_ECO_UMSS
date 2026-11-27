@@ -1,0 +1,7 @@
+# Tema visual de la calculadora.
+# Funciona con el modo claro y el oscuro del navegador.
+
+[theme]
+# Color principal (botones, selección de opciones, enlaces): azul,
+# el mismo color que las cuotas en el código de colores.
+primaryColor = "#1c83e1"

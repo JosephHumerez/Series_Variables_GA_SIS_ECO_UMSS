@@ -1,8 +1,27 @@
 """
-Página de inicio: qué hace la calculadora y qué metodología sigue.
+Página de inicio: qué hace la calculadora, qué metodología sigue,
+el código de colores y cómo recorrer las páginas.
 """
 
 import streamlit as st
+
+from interfaz.estilo import COLORES, coloreado, insignia, latex_coloreado
+
+
+def _formulas_coloreadas() -> str:
+    """Las tres fórmulas del libro, cada variable con su color."""
+    A = latex_coloreado("A", "A")
+    A_prima = latex_coloreado("cuota", "A'")
+    G = latex_coloreado("G", "G")
+    P = latex_coloreado("P", "P")
+    F = latex_coloreado("F", "F")
+    i = latex_coloreado("i", "i")
+    n = latex_coloreado("n", "n")
+    return (
+        rf"{A} = {A_prima} \pm {G}\,(A/G;\ {i};\ {n})"
+        rf"\qquad {P} = {A}\,(P/A;\ {i};\ {n})"
+        rf"\qquad {F} = {A}\,(F/A;\ {i};\ {n})"
+    )
 
 
 def mostrar() -> None:
@@ -13,34 +32,42 @@ def mostrar() -> None:
         "M. Sc. Emir Vargas Peredo (Unidad 2: Valor del dinero en el tiempo)."
     )
 
-    st.subheader("Metodología")
+    # ------------------------------------------------------------------
+    st.subheader(":material/school: Metodología")
     st.markdown(
-        "La serie se descompone en una **serie uniforme base** (A' repetido n veces) "
-        "y una **serie gradiente pura** (0, G, 2G, …, (n−1)G). El gradiente se convierte "
-        "en una anualidad equivalente, se suma o resta a la base, y la anualidad total "
-        "se lleva a valor presente o futuro:"
+        f"La serie se descompone en una {coloreado('cuota', 'serie uniforme base')} "
+        f"(A' repetido n veces) y una {coloreado('G', 'serie gradiente pura')} "
+        "(0, G, 2G, …, (n−1)G). El gradiente se convierte en una "
+        f"{coloreado('A', 'anualidad equivalente')}, se suma o resta a la base, y la "
+        f"anualidad total se lleva a {coloreado('P', 'valor presente')} o "
+        f"{coloreado('F', 'valor futuro')}:"
     )
-    st.latex(r"A = A' \pm G\,(A/G;\ i;\ n) \qquad P = A\,(P/A;\ i;\ n) \qquad F = A\,(F/A;\ i;\ n)")
+    st.latex(_formulas_coloreadas())
 
-    st.subheader("Notación")
-    st.markdown(
-        "| Símbolo | Significado |\n"
-        "|---|---|\n"
-        "| **A'** | Primer pago (serie base) |\n"
-        "| **G** | Gradiente: aumento o disminución constante por periodo |\n"
-        "| **i** | Tasa efectiva del periodo de pago |\n"
-        "| **n** | Número de periodos (cuotas) |\n"
-        "| **P** | Valor presente (periodo 0) |\n"
-        "| **F** | Valor futuro (periodo n) |\n"
-        "| **A** | Anualidad equivalente total |\n"
-        "| **Xₖ** | Pago del periodo k:  Xₖ = A' ± (k − 1)·G |"
-    )
+    # ------------------------------------------------------------------
+    st.subheader(":material/palette: Código de colores")
+    st.markdown("Cada concepto tiene **siempre el mismo color** en los datos, los "
+                "resultados, el procedimiento, el diagrama y la tabla.")
+    columnas = st.columns(len(COLORES))
+    for columna, (concepto, color) in zip(columnas, COLORES.items()):
+        with columna:
+            st.markdown(f"{insignia(concepto)}  \n{color.significado}")
 
-    st.subheader("Cómo usarla")
-    st.markdown(
-        "1. **Conversión de tasas:** si la tasa del problema no está en el periodo de "
-        "los pagos, conviértela primero y pulsa *Usar esta tasa*.\n"
-        "2. **Cálculo directo:** P, F, A, cuotas, diagrama de flujo y procedimiento "
-        "a partir de A', G, i y n.\n"
-        "3. **Despejes:** hallar n, i, A', G, o A' y G a la vez."
-    )
+    # ------------------------------------------------------------------
+    st.subheader(":material/route: Cómo usarla")
+    pasos = [
+        ("i", ":material/percent:", "1. Conversión de tasas",
+         "Si la tasa del problema no está en el periodo de los pagos, conviértela "
+         "y pulsa **Usar esta tasa**."),
+        ("P", ":material/calculate:", "2. Cálculo directo",
+         "A partir de A', G, i y n obtén A, P, F, las cuotas, el diagrama de flujo "
+         "y el procedimiento del libro."),
+        ("G", ":material/function:", "3. Despejes",
+         "Halla la incógnita que falte: n, i, A', G, o A' y G a la vez."),
+    ]
+    for columna, (concepto, icono, titulo, texto) in zip(st.columns(3), pasos):
+        with columna, st.container(key=f"tarjeta-{concepto}-inicio", height="stretch"):
+            st.markdown(f"#### {icono} {titulo}")
+            st.markdown(texto)
+    st.caption("Las páginas están en el menú lateral. Cada una viene cargada con un "
+               "ejercicio resuelto del libro.")

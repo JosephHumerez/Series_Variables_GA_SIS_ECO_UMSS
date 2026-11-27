@@ -11,7 +11,7 @@ está en la carpeta "interfaz" y toda la matemática en la carpeta "gradiente".
 
 import streamlit as st
 
-from interfaz import comun, pag_despejes, pag_directo, pag_inicio, pag_tasas
+from interfaz import comun, estilo, pag_despejes, pag_directo, pag_inicio, pag_tasas
 
 
 st.set_page_config(
@@ -19,6 +19,9 @@ st.set_page_config(
     page_icon=":material/functions:",
     layout="wide",
 )
+
+# Colores de las tarjetas de resultado (ver interfaz/estilo.py)
+estilo.aplicar_estilos()
 
 # Menú lateral con las páginas de la aplicación
 navegacion = st.navigation([
@@ -40,3 +43,4 @@ navegacion.run()
 
 # Se dibuja DESPUÉS de la página, para que muestre la tasa recién guardada
 comun.mostrar_tasa_activa_en_barra()
+estilo.mostrar_leyenda()

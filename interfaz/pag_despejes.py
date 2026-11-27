@@ -58,18 +58,19 @@ def _pedir_dato(prefijo: str, dato_defecto: str, valor_defecto: float) -> tuple[
         "Valor conocido", list(NOMBRE_DATO), index=list(NOMBRE_DATO).index(dato_defecto),
         format_func=lambda x: NOMBRE_DATO[x], key=f"{prefijo}_dato",
     )
-    valor = st.number_input(f"Valor de {dato}", value=valor_defecto, step=100.0,
+    valor = st.number_input(f"Valor de {coloreado(dato, dato)}", value=valor_defecto, step=100.0,
                             format="%.2f", key=f"{prefijo}_valor")
     return dato, valor
 
 
 def _pedir_A_prima(prefijo: str, defecto: float) -> float:
-    return st.number_input("Primer pago, A'", value=defecto, step=100.0,
+    return st.number_input(f"Primer pago, {A_PRIMA}", value=defecto, step=100.0,
                            format="%.2f", key=f"{prefijo}_A")
 
 
 def _pedir_G(prefijo: str, defecto: float) -> float:
-    return st.number_input("Gradiente, G", min_value=0.0, value=defecto, step=100.0,
+    return st.number_input(f"Gradiente, {coloreado('G', 'G')}", min_value=0.0, value=defecto,
+                           step=100.0,
                            format="%.2f", key=f"{prefijo}_G",
                            help="Siempre positivo. El sentido se elige en «Tipo de gradiente».")
 
@@ -81,8 +82,8 @@ def _pedir_tipo(prefijo: str, defecto: str) -> str:
 
 
 def _pedir_n(prefijo: str, defecto: int) -> int:
-    return int(st.number_input("Número de cuotas, n", min_value=1, value=defecto,
-                               step=1, key=f"{prefijo}_n"))
+    return int(st.number_input(f"Número de cuotas, {coloreado('n', 'n')}", min_value=1,
+                               value=defecto, step=1, key=f"{prefijo}_n"))
 
 
 def _opciones_avanzadas(prefijo: str, con_inicio: bool = True) -> tuple[int, str]:
@@ -100,11 +101,17 @@ def _opciones_avanzadas(prefijo: str, con_inicio: bool = True) -> tuple[int, str
     return inicio, "ingreso" if "Ingresos" in sentido else "egreso"
 
 
-def _metricas_n(n_exacto: float, n_sugerido: int, es_entero: bool) -> list[tuple[str, str]]:
-    """Recuadros para n: el entero si es exacto; si no, el exacto y el sugerido."""
+def _metricas_n(n_exacto: float, n_sugerido: int, es_entero: bool) -> list[Resultado]:
+    """Tarjetas para n: el entero si es exacto; si no, el exacto y el sugerido."""
     if es_entero:
-        return [("Número de periodos, n", str(n_sugerido))]
-    return [("n exacto", formato_numero(n_exacto, 4)), ("n sugerido (entero)", str(n_sugerido))]
+        return [("n", "n", "Número de periodos", str(n_sugerido))]
+    return [("n", "n", "Valor exacto", formato_numero(n_exacto, 4)),
+            ("n", "n", "Sugerido (entero)", str(n_sugerido))]
+
+
+def _tipo(tipo: str) -> Resultado:
+    """Tarjeta con el tipo de gradiente."""
+    return ("G", "G", "Tipo de gradiente", tipo.capitalize())
 
 
 # ===========================================================================
@@ -118,15 +125,14 @@ def _modo_n_ultimo() -> Salida:
     with c1:
         A_prima = _pedir_A_prima(p, 30_000.0)
     with c2:
-        ultimo = st.number_input("Último pago, Xₙ", value=10_000.0, step=100.0,
-                                 format="%.2f", key=f"{p}_ultimo")
+        ultimo = st.number_input(f"Último pago, {coloreado('cuota', 'Xₙ')}", value=10_000.0,
+                                 step=100.0, format="%.2f", key=f"{p}_ultimo")
     with c3:
         G = _pedir_G(p, 2_000.0)
     _, sentido = _opciones_avanzadas(p, con_inicio=False)
 
     r = d.n_por_ultimo_pago(A_prima, ultimo, G)
-    metricas = _metricas_n(r.n_exacto, r.n_sugerido, r.es_entero)
-    metricas.append(("Tipo de gradiente", r.tipo.capitalize()))
+    metricas = _metricas_n(r.n_exacto, r.n_sugerido, r.es_entero) + [_tipo(r.tipo)]
     avisos = [] if r.es_entero else [
         f"n = {formato_numero(r.n_exacto, 4)} no es entero: el último pago no encaja "
         f"exactamente con el gradiente. El diagrama y la tabla usan n = {r.n_sugerido}."
@@ -151,7 +157,7 @@ def _modo_base() -> Salida:
     inicio, sentido = _opciones_avanzadas(p)
 
     r = d.despejar_base(valor, dato, G, tipo, i, n, inicio)
-    return Salida([("Primer pago, A'", formato_numero(r.A_prima))],
+    return Salida([("cuota", "A'", "Primer pago", formato_numero(r.A_prima))],
                   procedimiento_despeje(r), r.serie, sentido, dato)
 
 
@@ -169,7 +175,7 @@ def _modo_gradiente() -> Salida:
     inicio, sentido = _opciones_avanzadas(p)
 
     r = d.despejar_gradiente(valor, dato, A_prima, i, n, inicio)
-    return Salida([("Gradiente, G", formato_numero(r.G)), ("Tipo de gradiente", r.tipo.capitalize())],
+    return Salida([("G", "G", "Gradiente", formato_numero(r.G)), _tipo(r.tipo)],
                   procedimiento_despeje(r), r.serie, sentido, dato)
 
 
@@ -183,17 +189,17 @@ def _modo_sistema() -> Salida:
         k = int(st.number_input("Cuota conocida, k", min_value=1, value=11, step=1,
                                 key=f"{p}_k", help="Número de la cuota cuyo monto se conoce. "
                                                    "Para el último pago, k = n."))
-        X_k = st.number_input("Monto de esa cuota, Xₖ", value=10_000.0, step=100.0,
-                              format="%.2f", key=f"{p}_Xk")
+        X_k = st.number_input(f"Monto de esa cuota, {coloreado('cuota', 'Xₖ')}", value=10_000.0,
+                              step=100.0, format="%.2f", key=f"{p}_Xk")
     with c3:
         i = pedir_tasa(p, 9.27)
         n = _pedir_n(p, 11)
     inicio, sentido = _opciones_avanzadas(p)
 
     r = d.despejar_base_y_gradiente(valor, dato, k, X_k, i, n, inicio)
-    metricas = [("Primer pago, A'", formato_numero(r.A_prima)),
-                ("Gradiente, G", formato_numero(r.G)),
-                ("Tipo de gradiente", r.tipo.capitalize())]
+    metricas = [("cuota", "A'", "Primer pago", formato_numero(r.A_prima)),
+                ("G", "G", "Gradiente", formato_numero(r.G)),
+                _tipo(r.tipo)]
     return Salida(metricas, procedimiento_despeje(r), r.serie, sentido, dato)
 
 
@@ -212,9 +218,10 @@ def _modo_tasa() -> Salida:
     inicio, sentido = _opciones_avanzadas(p)
 
     r = dn.despejar_tasa(valor, dato, A_prima, G, tipo, n, inicio)
-    metricas = [("Tasa por periodo, i", formato_porcentaje(r.i))]
+    metricas = [("i", "i", "Tasa por periodo", formato_porcentaje(r.i))]
     if r.interpolacion is not None:
-        metricas.append(("i por interpolación (tabla)", formato_porcentaje(r.interpolacion.i_interpolada)))
+        metricas.append(("i", "i", "Por interpolación (tabla)",
+                         formato_porcentaje(r.interpolacion.i_interpolada)))
     return Salida(metricas, procedimiento_tasa(r), r.serie, sentido, dato, avisos=list(r.avisos))
 
 
@@ -259,8 +266,10 @@ MODOS = {
 def _mostrar_salida(s: Salida) -> None:
     """Resultados, avisos, diagrama y pestañas de detalle."""
     st.divider()
-    for columna, (etiqueta, valor) in zip(st.columns(len(s.metricas)), s.metricas):
-        columna.metric(etiqueta, valor)
+    columnas = st.columns(len(s.metricas))
+    for numero, (columna, (concepto, simbolo, titulo, valor)) in enumerate(zip(columnas, s.metricas)):
+        with columna:
+            tarjeta(concepto, titulo, valor, clave=f"des{numero}", simbolo=simbolo)
 
     resultado = calcular(s.serie)
     # Se combinan los avisos del despeje con los de las cuotas, sin repetir
@@ -295,7 +304,7 @@ def mostrar() -> None:
     st.markdown("Halla una incógnita de la serie a partir de los demás datos. "
                 "Cada opción viene cargada con un ejercicio del libro.")
 
-    nombre = st.selectbox("¿Qué deseas hallar?", list(MODOS), key="des_modo")
+    nombre = st.selectbox(":material/help: ¿Qué deseas hallar?", list(MODOS), key="des_modo")
     try:
         salida = MODOS[nombre]()
     except ValueError as error:
